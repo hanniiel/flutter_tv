@@ -1,6 +1,6 @@
 # flutter_tv
 
-Flutter TV App
+Flutter App for Android TV
 
 ## Getting Started
 
