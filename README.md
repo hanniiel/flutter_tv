@@ -3,7 +3,7 @@
 Flutter App for Android TV
 
 ## Getting Started
-<img src="https://i.imgur.com/N1pdW85" height="300"/>
+<img src="screenshots/1.png" height="300"/>
 
 This project is a starting point for a Flutter application.
 
