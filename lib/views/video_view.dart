@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-class SecondScreen extends StatefulWidget {
+class VideoScreen extends StatefulWidget {
+  static String id = 'videoView';
   @override
-  _SecondScreenState createState() => _SecondScreenState();
+  _VideoScreenState createState() => _VideoScreenState();
 }
 
-class _SecondScreenState extends State<SecondScreen> {
+class _VideoScreenState extends State<VideoScreen> {
   VideoPlayerController _controller;
 
   @override

@@ -106,7 +106,7 @@ const kTitleMenuStyle = TextStyle(
 const kTitleHomeMenu = TextStyle(
   color: Colors.white,
   fontFamily: 'Alongsanss',
-  fontSize: 16,
+  fontSize: 20,
   fontWeight: FontWeight.w300,
 );
 
