@@ -3,11 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tv/bloc/bloc_categories.dart';
+import 'package:flutter_tv/bloc/bloc_category_selector.dart';
 import 'package:flutter_tv/bloc/bloc_newest.dart';
 import 'package:flutter_tv/bloc/bloc_popular.dart';
 import 'package:flutter_tv/bloc/simple_bloc_observer.dart';
 import 'package:flutter_tv/repositories/category_reposityory.dart';
 import 'package:flutter_tv/repositories/training_repository.dart';
+import 'package:flutter_tv/views/category_view.dart';
 import 'package:flutter_tv/views/detail_view.dart';
 import 'package:flutter_tv/views/video_view.dart';
 import 'package:flutter_tv/views/home_view.dart';
@@ -60,7 +62,12 @@ class MyApp extends StatelessWidget {
           routes: {
             HomeScreen.id: (context) => HomeScreen(),
             VideoScreen.id: (context) => VideoScreen(),
-            DetailScreen.id: (context) => DetailScreen()
+            DetailScreen.id: (context) => DetailScreen(),
+            CategoryScreen.id: (context) => BlocProvider(
+                  create: (context) => CategorySelectorBloc(
+                      context.repository<TrainingFireStoreRepository>()),
+                  child: CategoryScreen(),
+                ),
           },
         ),
       ),

@@ -38,7 +38,7 @@ class TrainingFireStoreRepository extends TrainingRepository {
       switch (key) {
         case 'category':
           print(value);
-          q = q.where(key, arrayContainsAny: value);
+          q = q.where(key, isEqualTo: value);
           break;
       }
     });

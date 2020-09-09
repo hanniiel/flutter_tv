@@ -9,6 +9,7 @@ import 'package:flutter_tv/components/focus_widget.dart';
 import 'package:flutter_tv/components/home_section.dart';
 import 'package:flutter_tv/utils/KeyEventHandler.dart';
 import 'package:flutter_tv/utils/UrlImage.dart';
+import 'package:flutter_tv/views/category_view.dart';
 import 'package:flutter_tv/views/detail_view.dart';
 import 'package:flutter_tv/views/video_view.dart';
 
@@ -143,6 +144,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               event: (event) {
                                 onKeyEvent(event, enter: () {
                                   //navigate to selected category
+                                  Navigator.pushNamed(
+                                      context, CategoryScreen.id,
+                                      arguments: category);
                                 });
                               },
                               hasFocus: (hasFocus) {

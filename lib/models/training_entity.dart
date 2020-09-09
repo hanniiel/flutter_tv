@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-class TrainingEntity {
+class TrainingEntity extends Equatable {
   String id;
   String name;
   String iName;
@@ -16,8 +17,15 @@ class TrainingEntity {
   List bloques;
   List<dynamic> series;
   DocumentReference trainer;
+  bool isNew;
+  bool isPopular;
+  bool isPro;
+  String type;
+  String body;
   bool active;
   String videoId;
+  //
+  bool isFocused;
 
   static TrainingEntity fromSnap(QueryDocumentSnapshot snapshot) {
     return TrainingEntity(
@@ -37,6 +45,37 @@ class TrainingEntity {
       videoId: snapshot.data()['video'],
       series: snapshot.data()['series'],
       bloques: snapshot.data()['bloques'],
+      isNew: snapshot.data()['isNew'],
+      isPopular: snapshot.data()['isPopular'],
+      isPro: snapshot.data()['isPro'],
+      body: snapshot.data()['body'],
+      type: snapshot.data()['type'],
+    );
+  }
+
+  TrainingEntity copyWith({bool isFocused}) {
+    return TrainingEntity(
+      isFocused: isFocused,
+      id: id,
+      name: name,
+      iName: iName,
+      description: description,
+      duration: duration,
+      calories: calories,
+      difficulty: difficulty,
+      cover: cover,
+      coverFull: coverFull,
+      trainer: trainer,
+      equipment: equipment,
+      category: category,
+      videoId: videoId,
+      series: series,
+      bloques: bloques,
+      isNew: isNew,
+      isPopular: isPopular,
+      isPro: isPro,
+      body: body,
+      type: type,
     );
   }
 
@@ -57,5 +96,14 @@ class TrainingEntity {
       @required this.active,
       @required this.category,
       @required this.videoId,
+      this.isFocused = false,
+      this.isNew,
+      this.isPopular,
+      this.isPro,
+      this.body,
+      this.type,
       this.trainer});
+
+  @override
+  List<Object> get props => [id, isFocused];
 }
