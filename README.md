@@ -7,6 +7,8 @@ Flutter App for Android TV
 <img src="screenshots/1.png" height="300"/>
 <h1>Details</h1>
 <img src="screenshots/2.png" height="300"/>
+<h1>Filtered</h1>
+<img src="screenshots/3.png" height="300"/>
 
 This project is a starting point for a Flutter application.
 
