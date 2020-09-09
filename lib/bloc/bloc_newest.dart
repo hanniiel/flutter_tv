@@ -21,6 +21,8 @@ class NewestBloc extends Bloc<NewestEvent, NewestState> {
       yield* _mapToLoadState();
     } else if (event is NewestEventUpdate) {
       yield* _mapToUpdateState();
+    } else if (event is NewestEventFocusChanged) {
+      yield* _mapToFocusChanged(event.element);
     }
   }
 
@@ -29,6 +31,12 @@ class NewestBloc extends Bloc<NewestEvent, NewestState> {
       trainings = event;
       add(NewestEventUpdate());
     });
+  }
+
+  Stream<NewestState> _mapToFocusChanged(TrainingEntity training) async* {
+    trainings =
+        trainings.map((e) => e.id == training.id ? training : e).toList();
+    yield NewestStateLoaded(trainings);
   }
 
   Stream<NewestState> _mapToUpdateState() async* {
@@ -73,3 +81,8 @@ abstract class NewestEvent {
 class NewestEventLoad extends NewestEvent {}
 
 class NewestEventUpdate extends NewestEvent {}
+
+class NewestEventFocusChanged extends NewestEvent {
+  final TrainingEntity element;
+  const NewestEventFocusChanged(this.element);
+}

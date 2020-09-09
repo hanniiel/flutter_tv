@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tv/bloc/bloc_categories.dart';
 import 'package:flutter_tv/bloc/bloc_category_selector.dart';
@@ -44,31 +45,36 @@ class MyApp extends StatelessWidget {
             //lazy: false,
             create: (context) =>
                 PopularBloc(context.repository<TrainingFireStoreRepository>())
-                  ..add(PopularEvent.LOAD),
+                  ..add(PopularEventLoad()),
           ),
           BlocProvider(
               create: (context) => CategoriesBloc(
                   context.repository<CategoryFireStoreRepository>())
-                ..add(CategoryEvent.LOAD))
+                ..add(CategoryEventLoad()))
         ],
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'TV App',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
-          initialRoute: HomeScreen.id,
-          routes: {
-            HomeScreen.id: (context) => HomeScreen(),
-            VideoScreen.id: (context) => VideoScreen(),
-            DetailScreen.id: (context) => DetailScreen(),
-            CategoryScreen.id: (context) => BlocProvider(
-                  create: (context) => CategorySelectorBloc(
-                      context.repository<TrainingFireStoreRepository>()),
-                  child: CategoryScreen(),
-                ),
+        child: Shortcuts(
+          shortcuts: <LogicalKeySet, Intent>{
+            LogicalKeySet(LogicalKeyboardKey.select): ActivateIntent(),
           },
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'TV App',
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
+            initialRoute: HomeScreen.id,
+            routes: {
+              HomeScreen.id: (context) => HomeScreen(),
+              VideoScreen.id: (context) => VideoScreen(),
+              DetailScreen.id: (context) => DetailScreen(),
+              CategoryScreen.id: (context) => BlocProvider(
+                    create: (context) => CategorySelectorBloc(
+                        context.repository<TrainingFireStoreRepository>()),
+                    child: CategoryScreen(),
+                  ),
+            },
+          ),
         ),
       ),
     );

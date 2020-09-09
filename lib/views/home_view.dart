@@ -11,65 +11,9 @@ import 'package:flutter_tv/utils/KeyEventHandler.dart';
 import 'package:flutter_tv/utils/UrlImage.dart';
 import 'package:flutter_tv/views/category_view.dart';
 import 'package:flutter_tv/views/detail_view.dart';
-import 'package:flutter_tv/views/video_view.dart';
 
-class Person {
-  final String name;
-  bool isSelected;
-  Person(this.name, this.isSelected);
-}
-
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   static String id = 'homeView';
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  var list2 = [
-    Person("", false),
-    Person("", false),
-    Person("", false),
-    Person("", false),
-    Person("", false),
-    Person("", false),
-    Person("", false),
-    Person("", false),
-  ];
-
-  var list3 = [
-    Person("", false),
-    Person("", false),
-    Person("", false),
-    Person("", false),
-    Person("", false),
-    Person("", false),
-    Person("", false),
-    Person("", false),
-  ];
-
-  var list4 = [
-    Person("", false),
-    Person("", false),
-    Person("", false),
-    Person("", false),
-    Person("", false),
-    Person("", false),
-    Person("", false),
-    Person("", false),
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           var training = trainings[index];
                           return FocusWidget(
                             customWidget: CardTv(
-                              isFocused: false,
+                              isFocused: training.isFocused,
                               title: training.name,
                               cover: UrlImage.getUrl(training.cover),
                             ),
@@ -108,9 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               });
                             },
                             hasFocus: (hasFocus) {
-                              setState(() {
-                                //focusedItem.isSelected = hasFocus;
-                              });
+                              BlocProvider.of<NewestBloc>(context).add(
+                                  NewestEventFocusChanged(
+                                      training.copyWith(isFocused: hasFocus)));
                             },
                           );
                         },
@@ -137,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             var category = categories[index];
                             return FocusWidget(
                               customWidget: CardCategoryTv(
+                                isFocused: category.isFocused,
                                 cover: UrlImage.getUrl(category.cover),
                                 icon: category.icon,
                                 title: category.name,
@@ -150,9 +95,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 });
                               },
                               hasFocus: (hasFocus) {
-                                setState(() {
-                                  //focusedItem.isSelected = hasFocus;
-                                });
+                                BlocProvider.of<CategoriesBloc>(context).add(
+                                    CategoryEventFocusChanged(category.copyWith(
+                                        isFocused: hasFocus)));
                               },
                             );
                           }),
@@ -180,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           var training = trainings[index];
                           return FocusWidget(
                             customWidget: CardTv(
-                              isFocused: false,
+                              isFocused: training.isFocused,
                               title: training.name,
                               cover: UrlImage.getUrl(training.cover),
                             ),
@@ -189,13 +134,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 //navigate to details card
                                 Navigator.pushNamed(context, DetailScreen.id,
                                     arguments: training);
-                                print('n ${training.name}');
                               });
                             },
                             hasFocus: (hasFocus) {
-                              setState(() {
-                                //focusedItem.isSelected = hasFocus;
-                              });
+                              BlocProvider.of<PopularBloc>(context).add(
+                                  PopularEventFocusChanged(
+                                      training.copyWith(isFocused: hasFocus)));
                             },
                           );
                         },

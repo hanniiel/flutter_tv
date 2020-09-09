@@ -34,16 +34,22 @@ class CardTv extends StatelessWidget {
             ),
             Container(
               padding: EdgeInsets.all(10),
-              height: 40,
+              height: isFocused ? 80 : 40,
               width: double.infinity,
-              color: Color(0xFF2F384B),
-              child: Text(
-                title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.left,
-                textScaleFactor: 0.7,
-                style: kTitleCardStyle,
+              color: isFocused ? Color(0xFF4EBEFF) : Color(0xFF2F384B),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      title,
+                      maxLines: isFocused ? 2 : 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.left,
+                      textScaleFactor: 0.7,
+                      style: kTitleCardStyle,
+                    ),
+                  ),
+                ],
               ),
             )
           ],

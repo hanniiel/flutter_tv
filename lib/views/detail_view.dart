@@ -10,13 +10,9 @@ import 'package:flutter_tv/utils/KeyEventHandler.dart';
 import 'package:flutter_tv/utils/UrlImage.dart';
 import 'package:flutter_tv/views/video_view.dart';
 
-class DetailScreen extends StatefulWidget {
+class DetailScreen extends StatelessWidget {
   static String id = 'detailView';
-  @override
-  _DetailScreenState createState() => _DetailScreenState();
-}
 
-class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
@@ -33,70 +29,50 @@ class _DetailScreenState extends State<DetailScreen> {
           fit: BoxFit.contain,
         ),
       ),
-      body: Stack(
-        fit: StackFit.expand,
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Container(
-                margin: EdgeInsets.all(15),
-                height: 300,
-                width: 200,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white, width: 0.5),
-                  color: Colors.black,
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      UrlImage.getUrl(training.cover),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FocusWidget(
+                    event: (e) {
+                      onKeyEvent(e, enter: () {
+                        Navigator.pushNamed(context, VideoScreen.id);
+                      });
+                    },
+                    customWidget: MaterialButton(
+                      onPressed: () {},
+                      color: Colors.grey,
+                      child: Text(
+                        'REPRODUCIR',
+                        style: kTitleDescriptions,
+                      ),
                     ),
-                    fit: BoxFit.contain,
                   ),
-                ),
+                  SizedBox(height: 10),
+                  Text(
+                    training.name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.start,
+                    style: kTitleScrollBarStyle.copyWith(
+                        fontSize: 25, height: 1.5),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    training.description,
+                    textAlign: TextAlign.justify,
+                    style: kDescriptionScroll.copyWith(fontSize: 23),
+                  ),
+                ],
               ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      FocusWidget(
-                        event: (e) {
-                          onKeyEvent(e, enter: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => VideoScreen()));
-                          });
-                        },
-                        customWidget: MaterialButton(
-                          onPressed: () {},
-                          color: Colors.grey,
-                          child: Text(
-                            'REPRODUCIR',
-                            style: kTitleDescriptions,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Text(
-                        training.name,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.start,
-                        style: kTitleScrollBarStyle.copyWith(fontSize: 30),
-                      ),
-                      Text(
-                        training.description,
-                        textAlign: TextAlign.justify,
-                        style: kDescriptionScroll.copyWith(fontSize: 25),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            ],
+            ),
           )
         ],
       ),

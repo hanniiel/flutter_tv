@@ -9,6 +9,8 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="flutter_tv"
+        android:banner="@drawable/app_icon_your_company"
+
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -36,6 +38,7 @@
               />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>

@@ -16,10 +16,12 @@ class CategoriesBloc extends Bloc<CategoryEvent, CategoryState> {
 
   @override
   Stream<CategoryState> mapEventToState(CategoryEvent event) async* {
-    if (event == CategoryEvent.LOAD) {
+    if (event is CategoryEventLoad) {
       yield* _mapToLoadEvent();
-    } else if (event == CategoryEvent.UPDATE) {
+    } else if (event is CategoryEventUpdate) {
       yield* _mapToUpdate();
+    } else if (event is CategoryEventFocusChanged) {
+      yield* _mapToFocusChanged(event.category);
     }
   }
 
@@ -27,8 +29,14 @@ class CategoriesBloc extends Bloc<CategoryEvent, CategoryState> {
     _subscription?.cancel();
     _subscription = _repository.getCategories().listen((event) {
       categories = event;
-      add(CategoryEvent.UPDATE);
+      add(CategoryEventUpdate());
     });
+  }
+
+  Stream<CategoryState> _mapToFocusChanged(CategoryEntity category) async* {
+    categories =
+        categories.map((e) => e.id == category.id ? category : e).toList();
+    yield CategoryStateLoaded(categories);
   }
 
   Stream<CategoryState> _mapToUpdate() async* {
@@ -62,4 +70,15 @@ class CategoryStateLoaded extends CategoryState {
 }
 
 //events
-enum CategoryEvent { LOAD, UPDATE }
+abstract class CategoryEvent {
+  const CategoryEvent();
+}
+
+class CategoryEventLoad extends CategoryEvent {}
+
+class CategoryEventUpdate extends CategoryEvent {}
+
+class CategoryEventFocusChanged extends CategoryEvent {
+  final CategoryEntity category;
+  const CategoryEventFocusChanged(this.category);
+}

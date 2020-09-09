@@ -57,7 +57,6 @@ class CategoryScreen extends StatelessWidget {
                         itemCount: ts.length,
                         itemBuilder: (context, index) {
                           var training = ts[index];
-                          print('isFocus: ${ts[index].isFocused}');
                           return FocusWidget(
                             customWidget: CardTv(
                               isFocused: training.isFocused,

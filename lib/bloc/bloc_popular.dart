@@ -17,18 +17,26 @@ class PopularBloc extends Bloc<PopularEvent, PopularState> {
 
   @override
   Stream<PopularState> mapEventToState(PopularEvent event) async* {
-    if (event == PopularEvent.LOAD) {
+    if (event is PopularEventLoad) {
       yield* _mapToLoadState();
-    } else if (event == PopularEvent.UPDATE) {
+    } else if (event is PopularEventUpdate) {
       yield* _mapToUpdateState();
+    } else if (event is PopularEventFocusChanged) {
+      yield* _mapToFocusChanged(event.training);
     }
   }
 
   Stream<PopularState> _mapToLoadState() async* {
     __streamSubscription = _repository.getPopular().listen((event) {
       trainings = event;
-      add(PopularEvent.UPDATE);
+      add(PopularEventUpdate());
     });
+  }
+
+  Stream<PopularState> _mapToFocusChanged(TrainingEntity training) async* {
+    trainings =
+        trainings.map((e) => e.id == training.id ? training : e).toList();
+    yield PopularStateLoaded(trainings);
   }
 
   Stream<PopularState> _mapToUpdateState() async* {
@@ -66,4 +74,15 @@ class PopularStateLoaded extends PopularState {
 }
 
 //event
-enum PopularEvent { LOAD, UPDATE }
+abstract class PopularEvent {
+  const PopularEvent();
+}
+
+class PopularEventLoad extends PopularEvent {}
+
+class PopularEventUpdate extends PopularEvent {}
+
+class PopularEventFocusChanged extends PopularEvent {
+  final TrainingEntity training;
+  const PopularEventFocusChanged(this.training);
+}

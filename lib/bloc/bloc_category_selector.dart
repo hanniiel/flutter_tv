@@ -41,18 +41,9 @@ class CategorySelectorBloc extends Bloc<CatSelectorEvent, CatSelectorState> {
   }
 
   Stream<CatSelectorState> _mapToFocusChanged(TrainingEntity training) async* {
-    //_trainings = [];
-    if (state is CatSelectorStateSelected) {
-      print(" focus: ${training.isFocused}");
-
-      _trainings = [];
-      _trainings = (state as CatSelectorStateSelected)
-          .trainings
-          .map((e) => e.id == training.id ? training : e)
-          .toList();
-      yield CatSelectorStateSelected(_trainings);
-      //add(CatSelectorEventUpdate());
-    }
+    _trainings =
+        _trainings.map((e) => e.id == training.id ? training : e).toList();
+    yield CatSelectorStateSelected(_trainings);
   }
 
   @override
