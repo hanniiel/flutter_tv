@@ -49,7 +49,8 @@ class ControlsBloc extends Bloc<ControlsEvent, ControlsState> {
       } else if (state is ControlsStateInvisible) {
         add(ControlsEvent.SHOW);
       }
-      if (e.logicalKey == LogicalKeyboardKey.select) {
+      if (e.logicalKey == LogicalKeyboardKey.select &&
+          state is ControlsStateInvisible) {
         f.traversalChildren.toList()[1].requestFocus();
       }
       currentSelection = f;

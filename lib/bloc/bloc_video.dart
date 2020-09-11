@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_tv/repositories/vimeo_repository.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:math' as math;
 
 class VideoBloc extends Bloc<VideoEvent, VideoState> {
   VideoPlayerController _playerController;
-
+  String videoID;
   VideoBloc() : super(VideoStateIdle());
 
   @override
@@ -25,8 +26,9 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
 
   Stream<VideoState> _mapToLoad() async* {
     yield VideoStateLoading();
+    var data = await VimeoRepository.getVideo(videoID);
     _playerController = VideoPlayerController.network(
-        'https://player.vimeo.com/external/408600892.hd.mp4?s=816b730099d0c1423487fcb265414148a0820a6d&profile_id=174&oauth2_token_id=1311231068')
+        data.files?.firstWhere((element) => element.width == 720)?.link ?? '')
       ..initialize().then((_) {
         add(VideoEvent.READY);
       });

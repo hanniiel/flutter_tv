@@ -3,14 +3,13 @@ import 'package:flutter_tv/models/vimeo_video_data.dart';
 import 'package:http/http.dart' as http;
 
 class VimeoRepository {
-  final String urlBase = 'https://api.vimeo.com/';
-  final String auth = Environment.VIMEO_TOKEN;
-  final String folder = 'videos/';
+  static const String urlBase = 'https://api.vimeo.com';
+  static const String auth = Environment.VIMEO_TOKEN;
 
   // {String videoId = '408600892'}
-  Future<VideoData> getVideo(String videoId) async {
+  static Future<VideoData> getVideo(String videoId) async {
     var response = await http
-        .get("$urlBase$folder$videoId", headers: {'Authorization': auth});
+        .get("$urlBase/videos/$videoId", headers: {'Authorization': auth});
 
     if (response.statusCode == 200) {
       return VideoData.fromRawJson(response.body);

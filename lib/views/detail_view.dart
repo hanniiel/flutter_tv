@@ -43,7 +43,8 @@ class DetailScreen extends StatelessWidget {
                   FocusWidget(
                     event: (e) {
                       onKeyEvent(e, enter: () {
-                        Navigator.pushNamed(context, VideoScreen.id);
+                        Navigator.pushNamed(context, VideoScreen.id,
+                            arguments: training);
                       });
                     },
                     customWidget: MaterialButton(

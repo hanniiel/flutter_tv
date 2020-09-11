@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tv/bloc/bloc_categories.dart';
 import 'package:flutter_tv/bloc/bloc_category_selector.dart';
 import 'package:flutter_tv/bloc/bloc_newest.dart';
+import 'package:flutter_tv/bloc/bloc_overlay.dart';
 import 'package:flutter_tv/bloc/bloc_popular.dart';
 import 'package:flutter_tv/bloc/bloc_video.dart';
 import 'package:flutter_tv/bloc/bloc_video_controls.dart';
@@ -71,9 +72,8 @@ class MyApp extends StatelessWidget {
               VideoScreen.id: (context) => MultiBlocProvider(
                     providers: [
                       BlocProvider(create: (context) => ControlsBloc()),
-                      BlocProvider(
-                        create: (context) => VideoBloc()..add(VideoEvent.LOAD),
-                      ),
+                      BlocProvider(create: (context) => OverlayBloc()),
+                      BlocProvider(create: (context) => VideoBloc()),
                     ],
                     child: VideoScreen(),
                   ),
