@@ -1,4 +1,12 @@
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_tv/bloc/bloc_video.dart';
+import 'package:flutter_tv/bloc/bloc_video_controls.dart';
+import 'package:flutter_tv/utils/KeyEventHandler.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoScreen extends StatefulWidget {
@@ -8,42 +16,112 @@ class VideoScreen extends StatefulWidget {
 }
 
 class _VideoScreenState extends State<VideoScreen> {
-  VideoPlayerController _controller;
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _controller = VideoPlayerController.network(
-        'https://player.vimeo.com/external/408600892.hd.mp4?s=816b730099d0c1423487fcb265414148a0820a6d&profile_id=174&oauth2_token_id=1311231068')
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {
-          _controller.play();
-        });
-      });
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
-    _controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.black,
-        child: Center(
-          child: _controller.value.initialized
-              ? AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  child: VideoPlayer(_controller),
+      backgroundColor: Colors.black,
+      body: BlocConsumer<VideoBloc, VideoState>(
+        listener: (_, state) {
+          if (state is VideoStateLoaded) {
+            //BlocProvider.of<ControlsBloc>(context).add(ControlsEvent.SHOW);
+          }
+        },
+        // ignore: missing_return
+        builder: (_, state) {
+          if (state is VideoStateLoaded) {
+            var playerController = state.playerController;
+            return Stack(
+              fit: StackFit.expand,
+              children: [
+                Center(
+                  child: AspectRatio(
+                    aspectRatio: playerController.value.aspectRatio,
+                    child: VideoPlayer(playerController),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  child: BlocBuilder<ControlsBloc, ControlsState>(
+                      // ignore: missing_return
+                      builder: (context, state) {
+                    return AnimatedOpacity(
+                      opacity: state is ControlsStateInvisible ? 0.0 : 1.0,
+                      duration: Duration(milliseconds: 300),
+                      child: Container(
+                        color: Colors.white38,
+                        height: 80,
+                        width: MediaQuery.of(context).size.width,
+                        child: FocusScope(
+                          autofocus: true,
+                          onKey:
+                              BlocProvider.of<ControlsBloc>(context).onKeyEvent,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                iconSize: 30,
+                                focusColor: Colors.grey.withOpacity(0.5),
+                                color: Colors.white,
+                                onPressed: () {
+                                  BlocProvider.of<VideoBloc>(context)
+                                      .add(VideoEvent.RWD);
+                                },
+                                icon: Icon(
+                                  Icons.fast_rewind,
+                                ),
+                              ),
+                              IconButton(
+                                iconSize: 40,
+                                focusColor: Colors.grey.withOpacity(0.5),
+                                color: Colors.white,
+                                onPressed: () {
+                                  BlocProvider.of<VideoBloc>(context)
+                                      .add(VideoEvent.PLAY_PAUSE);
+                                },
+                                icon: Icon(
+                                  playerController.value.isPlaying
+                                      ? Icons.pause
+                                      : Icons.play_arrow,
+                                ),
+                              ),
+                              IconButton(
+                                iconSize: 30,
+                                focusColor: Colors.grey.withOpacity(0.5),
+                                color: Colors.white,
+                                onPressed: () {
+                                  BlocProvider.of<VideoBloc>(context)
+                                      .add(VideoEvent.FFW);
+                                },
+                                icon: Icon(
+                                  Icons.fast_forward,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
                 )
-              : Container(),
-        ),
+              ],
+            );
+          } else {
+            return Center(
+                child: CircularProgressIndicator(
+              backgroundColor: Colors.white,
+            ));
+          }
+        },
       ),
     );
   }

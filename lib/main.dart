@@ -7,6 +7,8 @@ import 'package:flutter_tv/bloc/bloc_categories.dart';
 import 'package:flutter_tv/bloc/bloc_category_selector.dart';
 import 'package:flutter_tv/bloc/bloc_newest.dart';
 import 'package:flutter_tv/bloc/bloc_popular.dart';
+import 'package:flutter_tv/bloc/bloc_video.dart';
+import 'package:flutter_tv/bloc/bloc_video_controls.dart';
 import 'package:flutter_tv/bloc/simple_bloc_observer.dart';
 import 'package:flutter_tv/repositories/category_reposityory.dart';
 import 'package:flutter_tv/repositories/training_repository.dart';
@@ -66,7 +68,15 @@ class MyApp extends StatelessWidget {
             initialRoute: HomeScreen.id,
             routes: {
               HomeScreen.id: (context) => HomeScreen(),
-              VideoScreen.id: (context) => VideoScreen(),
+              VideoScreen.id: (context) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider(create: (context) => ControlsBloc()),
+                      BlocProvider(
+                        create: (context) => VideoBloc()..add(VideoEvent.LOAD),
+                      ),
+                    ],
+                    child: VideoScreen(),
+                  ),
               DetailScreen.id: (context) => DetailScreen(),
               CategoryScreen.id: (context) => BlocProvider(
                     create: (context) => CategorySelectorBloc(
