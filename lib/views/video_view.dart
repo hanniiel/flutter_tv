@@ -1,8 +1,10 @@
+import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tv/bloc/bloc_overlay.dart';
 import 'package:flutter_tv/bloc/bloc_video.dart';
 import 'package:flutter_tv/bloc/bloc_video_controls.dart';
+import 'package:flutter_tv/components/bloque_widget.dart';
 import 'package:flutter_tv/components/caption_widget.dart';
 import 'package:flutter_tv/models/training_entity.dart';
 import 'package:flutter_tv/utils/captions_helper.dart';
@@ -10,23 +12,21 @@ import 'package:video_player/video_player.dart';
 import 'package:flutter_tv/utils/format_time.dart';
 
 class VideoScreen extends StatelessWidget {
+  final TrainingEntity training;
   static String id = 'videoView';
+
+  VideoScreen(this.training);
 
   @override
   Widget build(BuildContext context) {
-    final TrainingEntity training = ModalRoute.of(context).settings.arguments;
-    CaptionsHelper.clearCaptions();
     CaptionsHelper.setCaptions(training);
-    BlocProvider.of<VideoBloc>(context).videoID = training.videoId;
-    BlocProvider.of<VideoBloc>(context).add(VideoEvent.LOAD);
     return Scaffold(
       backgroundColor: Colors.black,
       body: BlocConsumer<VideoBloc, VideoState>(
-        listener: (_, state) {
+        listener: (context, state) {
           if (state is VideoStateLoaded) {
             BlocProvider.of<OverlayBloc>(context)
                 .add(OverlayEventLoad(state.playerController));
-            //BlocProvider.of<ControlsBloc>(context).add(ControlsEvent.SHOW);
           }
         },
         // ignore: missing_return
@@ -44,32 +44,48 @@ class VideoScreen extends StatelessWidget {
                 ),
 
                 ///optional : custom captions remove if not required & CaptionHelper methods
-                Positioned.fill(
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: BlocBuilder<OverlayBloc, OverlayStates>(
-                      // ignore: missing_return
-                      builder: (_, state) {
-                        if (state is OverlayStateUpdate) {
-                          var lastValue = state.lastValue;
-                          var caption =
-                              CaptionsHelper.getCaption(lastValue.position);
-                          if (caption == null) return Container();
-
-                          return CaptionProgressWidget(
-                            title: caption.subtitle.title,
-                            description: caption.subtitle.desc,
-                            progress: caption.elapsed.inMicroseconds /
-                                caption.total.inMicroseconds,
-                            remaining: formatDuration(caption.remaining),
-                            alignment: EdgeInsets.only(
-                                left: 30, right: 30, bottom: 20),
-                          );
-                        }
-                        return Container();
-                      },
-                    ),
-                  ),
+                BlocBuilder<OverlayBloc, OverlayStates>(
+                  builder: (_, state) {
+                    if (state is OverlayStateUpdate) {
+                      var lastValue = state.lastValue;
+                      var caption =
+                          CaptionsHelper.getCaption(lastValue.position);
+                      var header = CaptionsHelper.getHeader(lastValue.position);
+                      return Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          header != null
+                              ? Positioned.fill(
+                                  child: Align(
+                                    alignment: Alignment.topCenter,
+                                    child: BloqueWidget(
+                                        header: header,
+                                        headers: CaptionsHelper.headers),
+                                  ),
+                                )
+                              : Container(),
+                          caption != null
+                              ? Positioned.fill(
+                                  child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: CaptionProgressWidget(
+                                      title: caption.subtitle.title,
+                                      description: caption.subtitle.desc,
+                                      progress: caption.elapsed.inMicroseconds /
+                                          caption.total.inMicroseconds,
+                                      remaining:
+                                          formatDuration(caption.remaining),
+                                      alignment: EdgeInsets.only(
+                                          left: 30, right: 30, bottom: 20),
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                        ],
+                      );
+                    }
+                    return Container();
+                  },
                 ),
 
                 /// video controls
@@ -97,8 +113,7 @@ class VideoScreen extends StatelessWidget {
                                 state is ControlsStateInvisible ? 0.0 : 1.0,
                             duration: Duration(milliseconds: 300),
                             child: Container(
-                              alignment: Alignment.bottomCenter,
-                              color: Colors.white38,
+                              color: Colors.black,
                               height: 80,
                               width: MediaQuery.of(context).size.width,
                               child: FocusScope(
@@ -110,7 +125,7 @@ class VideoScreen extends StatelessWidget {
                                   children: [
                                     IconButton(
                                       iconSize: 30,
-                                      focusColor: Colors.grey.withOpacity(0.5),
+                                      focusColor: Colors.white,
                                       color: Colors.white,
                                       onPressed: () {
                                         BlocProvider.of<VideoBloc>(context)

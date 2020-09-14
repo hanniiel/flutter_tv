@@ -6,8 +6,8 @@ import 'dart:math' as math;
 
 class VideoBloc extends Bloc<VideoEvent, VideoState> {
   VideoPlayerController _playerController;
-  String videoID;
-  VideoBloc() : super(VideoStateIdle());
+  final String videoId;
+  VideoBloc(this.videoId) : super(VideoStateIdle());
 
   @override
   Stream<VideoState> mapEventToState(VideoEvent event) async* {
@@ -26,7 +26,7 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
 
   Stream<VideoState> _mapToLoad() async* {
     yield VideoStateLoading();
-    var data = await VimeoRepository.getVideo(videoID);
+    var data = await VimeoRepository.getVideo(videoId);
     _playerController = VideoPlayerController.network(
         data.files?.firstWhere((element) => element.width == 720)?.link ?? '')
       ..initialize().then((_) {
@@ -93,6 +93,8 @@ abstract class VideoState {
 class VideoStateIdle extends VideoState {}
 
 class VideoStateLoading extends VideoState {}
+
+class VideoStateBuffering extends VideoState {}
 
 class VideoStateLoaded extends VideoState {
   final VideoPlayerController playerController;

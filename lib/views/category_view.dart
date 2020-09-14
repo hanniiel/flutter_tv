@@ -21,7 +21,10 @@ class CategoryScreen extends StatelessWidget {
     return Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
-          title: Text('cat filter'),
+          title: Text(category.name.toUpperCase()),
+          backgroundColor: Colors.black,
+          automaticallyImplyLeading: false,
+          centerTitle: true,
         ),
         body: BlocBuilder<CategorySelectorBloc, CatSelectorState>(
           // ignore: missing_return

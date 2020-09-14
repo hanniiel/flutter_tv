@@ -49,6 +49,7 @@ class DetailScreen extends StatelessWidget {
                     },
                     customWidget: MaterialButton(
                       onPressed: () {},
+                      autofocus: true,
                       color: Colors.grey,
                       child: Text(
                         'REPRODUCIR',
