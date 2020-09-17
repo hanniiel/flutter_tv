@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/animation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tv/bloc/bloc_overlay.dart';
@@ -36,10 +39,13 @@ class VideoScreen extends StatelessWidget {
             return Stack(
               fit: StackFit.expand,
               children: [
-                Center(
-                  child: AspectRatio(
-                    aspectRatio: playerController.value.aspectRatio,
-                    child: VideoPlayer(playerController),
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: AspectRatio(
+                      aspectRatio: playerController.value.aspectRatio,
+                      child: VideoPlayer(playerController),
+                    ),
                   ),
                 ),
 
@@ -93,92 +99,73 @@ class VideoScreen extends StatelessWidget {
                   child: BlocBuilder<ControlsBloc, ControlsState>(
                       // ignore: missing_return
                       builder: (context, state) {
-                    return Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        Container(
-                          child: AnimatedOpacity(
-                            opacity:
-                                state is ControlsStateInvisible ? 0.0 : 1.0,
-                            duration: Duration(milliseconds: 300),
-                            child: Container(
-                              color: Colors.black.withOpacity(0.5),
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: AnimatedOpacity(
-                            opacity:
-                                state is ControlsStateInvisible ? 0.0 : 1.0,
-                            duration: Duration(milliseconds: 300),
-                            child: Container(
-                              color: Colors.black,
-                              height: 80,
-                              width: MediaQuery.of(context).size.width,
-                              child: FocusScope(
-                                autofocus: true,
-                                onKey: BlocProvider.of<ControlsBloc>(context)
-                                    .onKeyEvent,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    IconButton(
-                                      iconSize: 30,
-                                      focusColor: Colors.white,
-                                      color: Colors.white,
-                                      onPressed: () {
-                                        BlocProvider.of<VideoBloc>(context)
-                                            .add(VideoEvent.RWD);
-                                      },
-                                      icon: Icon(
-                                        Icons.fast_rewind,
-                                      ),
+                    return AnimatedOpacity(
+                      opacity: state is ControlsStateInvisible ? 0.0 : 1.0,
+                      duration: Duration(milliseconds: 300),
+                      child: Scaffold(
+                        backgroundColor: Colors.black.withOpacity(0.5),
+                        body: Align(
+                          alignment: Alignment(0, 0.9),
+                          child: Ink(
+                            height: 80,
+                            color: Colors.black,
+                            child: FocusScope(
+                              autofocus: true,
+                              onKey: BlocProvider.of<ControlsBloc>(context)
+                                  .onKeyEvent,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  IconButton(
+                                    iconSize: 30,
+                                    focusColor: Colors.white.withOpacity(0.2),
+                                    color: Colors.white,
+                                    onPressed: () {
+                                      BlocProvider.of<VideoBloc>(context)
+                                          .add(VideoEvent.RWD);
+                                    },
+                                    icon: Icon(Icons.fast_rewind),
+                                  ),
+                                  IconButton(
+                                    iconSize: 40,
+                                    focusColor: Colors.white.withOpacity(0.2),
+                                    color: Colors.white,
+                                    onPressed: () {
+                                      BlocProvider.of<VideoBloc>(context)
+                                          .add(VideoEvent.PLAY_PAUSE);
+                                    },
+                                    icon: Icon(
+                                      playerController.value.isPlaying
+                                          ? Icons.pause
+                                          : Icons.play_arrow,
                                     ),
-                                    IconButton(
-                                      iconSize: 40,
-                                      focusColor: Colors.grey.withOpacity(0.5),
-                                      color: Colors.white,
-                                      onPressed: () {
-                                        BlocProvider.of<VideoBloc>(context)
-                                            .add(VideoEvent.PLAY_PAUSE);
-                                      },
-                                      icon: Icon(
-                                        playerController.value.isPlaying
-                                            ? Icons.pause
-                                            : Icons.play_arrow,
-                                      ),
-                                    ),
-                                    IconButton(
-                                      iconSize: 30,
-                                      focusColor: Colors.grey.withOpacity(0.5),
-                                      color: Colors.white,
-                                      onPressed: () {
-                                        BlocProvider.of<VideoBloc>(context)
-                                            .add(VideoEvent.FFW);
-                                      },
-                                      icon: Icon(
-                                        Icons.fast_forward,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                  IconButton(
+                                    iconSize: 30,
+                                    focusColor: Colors.white.withOpacity(0.2),
+                                    color: Colors.white,
+                                    onPressed: () {
+                                      BlocProvider.of<VideoBloc>(context)
+                                          .add(VideoEvent.FFW);
+                                    },
+                                    icon: Icon(Icons.fast_forward),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        )
-                      ],
+                        ),
+                      ),
                     );
                   }),
                 ),
               ],
             );
-          } else {
-            return Center(
-                child: CircularProgressIndicator(
-              backgroundColor: Colors.white,
-            ));
           }
+          return Center(
+              child: CircularProgressIndicator(
+            backgroundColor: Colors.white,
+          ));
         },
       ),
     );
