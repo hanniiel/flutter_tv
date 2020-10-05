@@ -16,6 +16,7 @@ import 'package:flutter_tv/repositories/category_reposityory.dart';
 import 'package:flutter_tv/repositories/training_repository.dart';
 import 'package:flutter_tv/views/category_view.dart';
 import 'package:flutter_tv/views/detail_view.dart';
+import 'package:flutter_tv/views/program_detail.dart';
 import 'package:flutter_tv/views/video_view.dart';
 import 'package:flutter_tv/views/home_view.dart';
 //env
@@ -71,6 +72,7 @@ class MyApp extends StatelessWidget {
             routes: {
               HomeScreen.id: (context) => HomeScreen(),
               DetailScreen.id: (context) => DetailScreen(),
+              ProgramDetailScreen.id: (context) => ProgramDetailScreen(),
               CategoryScreen.id: (context) => BlocProvider(
                     create: (context) => CategorySelectorBloc(
                         context.repository<TrainingFireStoreRepository>()),

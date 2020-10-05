@@ -11,6 +11,7 @@ import 'package:flutter_tv/utils/KeyEventHandler.dart';
 import 'package:flutter_tv/utils/UrlImage.dart';
 import 'package:flutter_tv/views/category_view.dart';
 import 'package:flutter_tv/views/detail_view.dart';
+import 'package:flutter_tv/views/program_detail.dart';
 
 class HomeScreen extends StatelessWidget {
   static String id = 'homeView';
