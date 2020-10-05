@@ -22,7 +22,7 @@ class CardTv extends StatelessWidget {
             color: Colors.black,
             border: Border.all(color: Colors.white, width: 0.5)),
         margin: EdgeInsets.all(10),
-        width: 300,
+        width: 350,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
