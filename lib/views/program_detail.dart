@@ -17,9 +17,11 @@ class ProgramDetailScreen extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Ink.image(
-              fit: BoxFit.contain,
+              fit: MediaQuery.of(context).orientation == Orientation.portrait
+                  ? BoxFit.contain
+                  : BoxFit.cover,
               image: NetworkImage(
-                  'https://firebasestorage.googleapis.com/v0/b/fitflow-87a22.appspot.com/o/covers%2Fcard_cover_42.png?alt=media'),
+                  'https://firebasestorage.googleapis.com/v0/b/fitflow-87a22.appspot.com/o/covers%2Ftv.jpeg?alt=media'),
             ),
           ),
           Column(
@@ -114,14 +116,8 @@ class ProgramDetailScreen extends StatelessWidget {
                     itemCount: 5,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (_, index) {
-                      return MaterialButton(
-                        onPressed: () {},
-                        focusColor: Colors.white,
-                        color: Color(0xFF2F384B),
-                        child: Text(
-                          'SEMANA 1',
-                          style: kTitleDescriptions,
-                        ),
+                      return CardTv(
+                        title: 'levantar pesas',
                       );
                     },
                   ),
