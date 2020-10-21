@@ -3,12 +3,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tv/components/card_tv.dart';
+<<<<<<< Updated upstream
 import 'package:flutter_tv/constants/constants.dart';
 
 class ProgramDetailScreen extends StatelessWidget {
   static String id = 'programDetailScreen';
   FocusScopeNode selection = FocusScopeNode();
   FocusScopeNode list = FocusScopeNode();
+=======
+import 'package:flutter_tv/components/focus_base.dart';
+import 'package:flutter_tv/constants/constants.dart';
+
+mixin Cards {
+  List<FocusScopeNode> elements;
+}
+
+class ProgramDetailScreen extends StatelessWidget implements Cards {
+  @override
+  List<FocusScopeNode> elements;
+
+  static String id = 'programDetailScreen';
+
+  FocusScopeNode selection = FocusScopeNode();
+
+  FocusScopeNode list = FocusScopeNode();
+
+>>>>>>> Stashed changes
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,12 +36,26 @@ class ProgramDetailScreen extends StatelessWidget {
       body: Stack(
         children: [
           Positioned.fill(
+<<<<<<< Updated upstream
             child: Ink.image(
               fit: MediaQuery.of(context).orientation == Orientation.portrait
                   ? BoxFit.contain
                   : BoxFit.cover,
               image: NetworkImage(
                   'https://firebasestorage.googleapis.com/v0/b/fitflow-87a22.appspot.com/o/covers%2Ftv.jpeg?alt=media'),
+=======
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                height: MediaQuery.of(context).size.height -
+                    (MediaQuery.of(context).size.height / 3),
+                child: Ink.image(
+                  fit: BoxFit.cover,
+                  image: NetworkImage(
+                      'https://firebasestorage.googleapis.com/v0/b/fitflow-87a22.appspot.com/o/covers%2Ftv.jpeg?alt=media'),
+                ),
+              ),
+>>>>>>> Stashed changes
             ),
           ),
           Column(
@@ -103,6 +137,10 @@ class ProgramDetailScreen extends StatelessWidget {
               ),
               Container(
                 height: 300,
+<<<<<<< Updated upstream
+=======
+                padding: EdgeInsets.all(10),
+>>>>>>> Stashed changes
                 child: FocusScope(
                   node: list,
                   onKey: (f, k) {
@@ -116,8 +154,15 @@ class ProgramDetailScreen extends StatelessWidget {
                     itemCount: 5,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (_, index) {
+<<<<<<< Updated upstream
                       return CardTv(
                         title: 'levantar pesas',
+=======
+                      return FocusBaseWidget(
+                        title: 'some title $index',
+                        onPressed: () {},
+                        onFocus: (isFocused) {},
+>>>>>>> Stashed changes
                       );
                     },
                   ),
