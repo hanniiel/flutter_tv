@@ -9,6 +9,18 @@ Flutter App for Android TV
 <img src="screenshots/2.png" height="300"/>
 <h1>Filtered</h1>
 <img src="screenshots/3.png" height="300"/>
+<h1>Video</h1>
+<img src="screenshots/4.png" height="300"/>
+<h1>Custom Player Controls</h1>
+<img src="screenshots/3.png" height="300"/>
+
+## Plugins implemented
+<ul>
+	<li>video_player</li>
+	<li>flutter_blog</li>
+	<li>equatable</li>
+	<li>flutter svg</li>
+</ul>
 
 This project is a starting point for a Flutter application.
 
