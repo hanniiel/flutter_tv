@@ -12,7 +12,7 @@ Flutter App for Android TV
 <h1>Video</h1>
 <img src="screenshots/4.png" height="300"/>
 <h1>Custom Player Controls</h1>
-<img src="screenshots/3.png" height="300"/>
+<img src="screenshots/5.png" height="300"/>
 
 ## Plugins implemented
 <ul>
