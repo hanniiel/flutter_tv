@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tv/bloc/bloc_category_selector.dart';
 import 'package:flutter_tv/components/card_tv.dart';
+import 'package:flutter_tv/components/focus_base.dart';
 import 'package:flutter_tv/components/focus_widget.dart';
 import 'package:flutter_tv/components/home_section.dart';
 import 'package:flutter_tv/models/category_entity.dart';
@@ -60,24 +61,15 @@ class CategoryScreen extends StatelessWidget {
                         itemCount: ts.length,
                         itemBuilder: (context, index) {
                           var training = ts[index];
-                          return FocusWidget(
-                            customWidget: CardTv(
-                              isFocused: training.isFocused,
-                              title: training.name,
-                              cover: UrlImage.getUrl(training.cover),
-                            ),
-                            event: (event) {
-                              onKeyEvent(event, enter: () {
-                                //navigate to details card
-                                Navigator.pushNamed(context, DetailScreen.id,
-                                    arguments: training);
-                              });
+
+                          return FocusBaseWidget(
+                            onFocus: (isFocused) {},
+                            onPressed: () {
+                              Navigator.pushNamed(context, DetailScreen.id,
+                                  arguments: training);
                             },
-                            hasFocus: (hasFocus) {
-                              BlocProvider.of<CategorySelectorBloc>(context)
-                                  .add(CatSelectorChangeFocus(
-                                      training.copyWith(isFocused: hasFocus)));
-                            },
+                            title: training.name,
+                            cover: UrlImage.getUrl(training.cover),
                           );
                         },
                       ),
