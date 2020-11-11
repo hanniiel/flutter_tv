@@ -5,6 +5,7 @@ import 'package:flutter_tv/bloc/bloc_newest.dart';
 import 'package:flutter_tv/bloc/bloc_popular.dart';
 import 'package:flutter_tv/components/card_category_tv.dart';
 import 'package:flutter_tv/components/card_tv.dart';
+import 'package:flutter_tv/components/focus_base.dart';
 import 'package:flutter_tv/components/focus_widget.dart';
 import 'package:flutter_tv/components/home_section.dart';
 import 'package:flutter_tv/utils/KeyEventHandler.dart';
@@ -38,24 +39,14 @@ class HomeScreen extends StatelessWidget {
                         itemCount: trainings.length,
                         itemBuilder: (context, index) {
                           var training = trainings[index];
-                          return FocusWidget(
-                            customWidget: CardTv(
-                              isFocused: training.isFocused,
-                              title: training.name,
-                              cover: UrlImage.getUrl(training.cover),
-                            ),
-                            event: (event) {
-                              onKeyEvent(event, enter: () {
-                                //navigate to details card
-                                Navigator.pushNamed(context, DetailScreen.id,
-                                    arguments: training);
-                              });
+                          return FocusBaseWidget(
+                            onFocus: (isFocused) {},
+                            onPressed: () {
+                              Navigator.pushNamed(context, DetailScreen.id,
+                                  arguments: training);
                             },
-                            hasFocus: (hasFocus) {
-                              BlocProvider.of<NewestBloc>(context).add(
-                                  NewestEventFocusChanged(
-                                      training.copyWith(isFocused: hasFocus)));
-                            },
+                            title: training.name,
+                            cover: UrlImage.getUrl(training.cover),
                           );
                         },
                       ),
@@ -123,24 +114,14 @@ class HomeScreen extends StatelessWidget {
                         itemCount: trainings.length,
                         itemBuilder: (context, index) {
                           var training = trainings[index];
-                          return FocusWidget(
-                            customWidget: CardTv(
-                              isFocused: training.isFocused,
-                              title: training.name,
-                              cover: UrlImage.getUrl(training.cover),
-                            ),
-                            event: (event) {
-                              onKeyEvent(event, enter: () {
-                                //navigate to details card
-                                Navigator.pushNamed(context, DetailScreen.id,
-                                    arguments: training);
-                              });
+                          return FocusBaseWidget(
+                            onFocus: (isFocused) {},
+                            onPressed: () {
+                              Navigator.pushNamed(context, DetailScreen.id,
+                                  arguments: training);
                             },
-                            hasFocus: (hasFocus) {
-                              BlocProvider.of<PopularBloc>(context).add(
-                                  PopularEventFocusChanged(
-                                      training.copyWith(isFocused: hasFocus)));
-                            },
+                            title: training.name,
+                            cover: UrlImage.getUrl(training.cover),
                           );
                         },
                       ),

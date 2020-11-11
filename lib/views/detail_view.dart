@@ -40,21 +40,16 @@ class DetailScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  FocusWidget(
-                    event: (e) {
-                      onKeyEvent(e, enter: () {
-                        Navigator.pushNamed(context, VideoScreen.id,
-                            arguments: training);
-                      });
+                  MaterialButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, VideoScreen.id,
+                          arguments: training);
                     },
-                    customWidget: MaterialButton(
-                      onPressed: () {},
-                      autofocus: true,
-                      color: Colors.grey,
-                      child: Text(
-                        'REPRODUCIR',
-                        style: kTitleDescriptions,
-                      ),
+                    autofocus: true,
+                    color: Colors.grey,
+                    child: Text(
+                      'REPRODUCIR',
+                      style: kTitleDescriptions,
                     ),
                   ),
                   SizedBox(height: 10),
@@ -67,10 +62,12 @@ class DetailScreen extends StatelessWidget {
                         fontSize: 25, height: 1.5),
                   ),
                   SizedBox(height: 10),
-                  Text(
-                    training.description,
-                    textAlign: TextAlign.justify,
-                    style: kDescriptionScroll.copyWith(fontSize: 23),
+                  Expanded(
+                    child: Text(
+                      training.description,
+                      textAlign: TextAlign.justify,
+                      style: kDescriptionScroll.copyWith(fontSize: 23),
+                    ),
                   ),
                 ],
               ),
