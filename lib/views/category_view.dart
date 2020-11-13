@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tv/bloc/bloc_category_selector.dart';
 import 'package:flutter_tv/components/card_tv.dart';
-import 'package:flutter_tv/components/focus_base.dart';
+import 'package:flutter_tv/components/core/focus_base.dart';
 import 'package:flutter_tv/components/focus_widget.dart';
 import 'package:flutter_tv/components/home_section.dart';
 import 'package:flutter_tv/models/category_entity.dart';

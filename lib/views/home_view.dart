@@ -5,7 +5,7 @@ import 'package:flutter_tv/bloc/bloc_newest.dart';
 import 'package:flutter_tv/bloc/bloc_popular.dart';
 import 'package:flutter_tv/components/card_category_tv.dart';
 import 'package:flutter_tv/components/card_tv.dart';
-import 'package:flutter_tv/components/focus_base.dart';
+import 'package:flutter_tv/components/core/focus_base.dart';
 import 'package:flutter_tv/components/focus_widget.dart';
 import 'package:flutter_tv/components/home_section.dart';
 import 'package:flutter_tv/utils/KeyEventHandler.dart';
@@ -70,26 +70,15 @@ class HomeScreen extends StatelessWidget {
                           itemCount: categories.length,
                           itemBuilder: (context, index) {
                             var category = categories[index];
-                            return FocusWidget(
-                              customWidget: CardCategoryTv(
-                                isFocused: category.isFocused,
-                                cover: UrlImage.getUrl(category.cover),
-                                icon: category.icon,
-                                title: category.name,
-                              ),
-                              event: (event) {
-                                onKeyEvent(event, enter: () {
-                                  //navigate to selected category
-                                  Navigator.pushNamed(
-                                      context, CategoryScreen.id,
-                                      arguments: category);
-                                });
+                            return CardCategoryTv(
+                              cover: UrlImage.getUrl(category.cover),
+                              icon: category.icon,
+                              title: category.name,
+                              onPressed: () {
+                                Navigator.pushNamed(context, CategoryScreen.id,
+                                    arguments: category);
                               },
-                              hasFocus: (hasFocus) {
-                                BlocProvider.of<CategoriesBloc>(context).add(
-                                    CategoryEventFocusChanged(category.copyWith(
-                                        isFocused: hasFocus)));
-                              },
+                              onFocus: (hasFocus) {},
                             );
                           }),
                     );
