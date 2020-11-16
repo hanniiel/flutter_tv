@@ -11,6 +11,7 @@ import 'package:flutter_tv/bloc/bloc_overlay.dart';
 import 'package:flutter_tv/bloc/bloc_popular.dart';
 import 'package:flutter_tv/bloc/bloc_video.dart';
 import 'package:flutter_tv/bloc/bloc_video_controls.dart';
+import 'package:flutter_tv/bloc/login/bloc_login.dart';
 import 'package:flutter_tv/bloc/simple_bloc_observer.dart';
 import 'package:flutter_tv/models/training_entity.dart';
 import 'package:flutter_tv/repositories/auth/auth_repository.dart';
@@ -84,7 +85,10 @@ class MyApp extends StatelessWidget {
                     ? HomeScreen.id
                     : LoginScreen.id,
             routes: {
-              LoginScreen.id: (context) => LoginScreen(),
+              LoginScreen.id: (context) => BlocProvider(
+                  create: (context) =>
+                      LoginBloc(context.repository<AuthRepository>()),
+                  child: LoginScreen()),
               HomeScreen.id: (context) => HomeScreen(),
               DetailScreen.id: (context) => DetailScreen(),
               CategoryScreen.id: (context) => BlocProvider(
