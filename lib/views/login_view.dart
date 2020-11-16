@@ -21,8 +21,40 @@ class LoginScreen extends StatelessWidget {
           if (state.isSuccess) {
             BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
             Navigator.pushReplacementNamed(context, HomeScreen.id);
+          } else if (state.isReset) {
+            showDialog(
+                context: context,
+                builder: (_) {
+                  return AlertDialog(
+                    title: Text('Restablecer contraseña'),
+                    content: Text('Se ha enviado el correo'),
+                    actions: [
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('Aceptar'),
+                      )
+                    ],
+                  );
+                });
           } else if (state.isFailure) {
-            print("failure to log in");
+            showDialog(
+                context: context,
+                builder: (_) {
+                  return AlertDialog(
+                    title: Text('Error'),
+                    content: Text('Ha ocurrido un error al iniciar sesión'),
+                    actions: [
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('Aceptar'),
+                      )
+                    ],
+                  );
+                });
           }
         },
         child: Column(
@@ -134,7 +166,39 @@ class LoginScreen extends StatelessWidget {
                 padding: EdgeInsets.only(left: 25, top: 15),
                 child: InkWell(
                   onTap: () {
-                    print('resetPassword');
+                    showDialog(
+                      context: context,
+                      builder: (_) {
+                        var resetController = TextEditingController();
+                        return AlertDialog(
+                          title: Text('Restablecer contraseña'),
+                          content: TextField(
+                            controller: resetController,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
+                              hintText: "email",
+                            ),
+                          ),
+                          actions: [
+                            FlatButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('Cancelar'),
+                            ),
+                            FlatButton(
+                              onPressed: () {
+                                print(resetController.value.text);
+                                BlocProvider.of<LoginBloc>(context).add(
+                                    ResetPassword(resetController.value.text));
+                                Navigator.pop(context);
+                              },
+                              child: Text('Enviar'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                   child: Text(
                     '¿Olvidaste tu contraseña?',

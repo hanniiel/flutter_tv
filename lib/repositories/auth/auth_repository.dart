@@ -9,6 +9,9 @@ class AuthRepository {
     return auth.signInWithEmailAndPassword(email: email, password: password);
   }
 
+  Future<void> resetPassword(String email) =>
+      auth.sendPasswordResetEmail(email: email);
+
   User get getUser => auth.currentUser;
 
   bool get isLoggedIn => auth.currentUser != null;
