@@ -29,7 +29,16 @@ void main() async {
   Bloc.observer = SimpleBlocObserver();
   await Firebase.initializeApp();
 
-  runApp(MyApp());
+  runApp(RepositoryProvider(
+    create: (context) => AuthRepository(),
+    child: BlocProvider<AuthenticationBloc>(
+      lazy: false,
+      create: (context) =>
+          AuthenticationBloc(context.repository<AuthRepository>())
+            ..add(AppStarted()),
+      child: MyApp(),
+    ),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -39,14 +48,9 @@ class MyApp extends StatelessWidget {
       providers: [
         RepositoryProvider(create: (context) => TrainingFireStoreRepository()),
         RepositoryProvider(create: (context) => CategoryFireStoreRepository()),
-        RepositoryProvider(create: (context) => AuthRepository()),
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider<AuthenticationBloc>(
-              lazy: false,
-              create: (context) =>
-                  AuthenticationBloc(context.repository<AuthRepository>())),
           BlocProvider<NewestBloc>(
             //lazy: false,
             create: (context) =>
