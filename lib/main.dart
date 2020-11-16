@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_tv/bloc/auth/bloc_authentication.dart';
 import 'package:flutter_tv/bloc/bloc_categories.dart';
 import 'package:flutter_tv/bloc/bloc_category_selector.dart';
 import 'package:flutter_tv/bloc/bloc_newest.dart';
@@ -12,10 +13,12 @@ import 'package:flutter_tv/bloc/bloc_video.dart';
 import 'package:flutter_tv/bloc/bloc_video_controls.dart';
 import 'package:flutter_tv/bloc/simple_bloc_observer.dart';
 import 'package:flutter_tv/models/training_entity.dart';
+import 'package:flutter_tv/repositories/auth/auth_repository.dart';
 import 'package:flutter_tv/repositories/category_reposityory.dart';
 import 'package:flutter_tv/repositories/training_repository.dart';
 import 'package:flutter_tv/views/category_view.dart';
 import 'package:flutter_tv/views/detail_view.dart';
+import 'package:flutter_tv/views/login_view.dart';
 import 'package:flutter_tv/views/video_view.dart';
 import 'package:flutter_tv/views/home_view.dart';
 //env
@@ -36,9 +39,14 @@ class MyApp extends StatelessWidget {
       providers: [
         RepositoryProvider(create: (context) => TrainingFireStoreRepository()),
         RepositoryProvider(create: (context) => CategoryFireStoreRepository()),
+        RepositoryProvider(create: (context) => AuthRepository()),
       ],
       child: MultiBlocProvider(
         providers: [
+          BlocProvider<AuthenticationBloc>(
+              lazy: false,
+              create: (context) =>
+                  AuthenticationBloc(context.repository<AuthRepository>())),
           BlocProvider<NewestBloc>(
             //lazy: false,
             create: (context) =>
@@ -67,8 +75,12 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
-            initialRoute: HomeScreen.id,
+            initialRoute:
+                (context.bloc<AuthenticationBloc>().state is Authenticated)
+                    ? HomeScreen.id
+                    : LoginScreen.id,
             routes: {
+              LoginScreen.id: (context) => LoginScreen(),
               HomeScreen.id: (context) => HomeScreen(),
               DetailScreen.id: (context) => DetailScreen(),
               CategoryScreen.id: (context) => BlocProvider(
