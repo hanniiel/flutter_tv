@@ -18,6 +18,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         email: event.email,
         password: event.password,
       );
+    } else if (event is ResetPassword) {
+      yield* _mapToResetPassword(event.email);
     }
   }
 
@@ -28,8 +30,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       await _authRepository.signInWithCredentials(
           email: email, password: password);
       yield LoginState.success();
-    } catch (e) {
-      print(e);
+    } catch (_) {
+      yield LoginState.failure();
+    }
+  }
+
+  Stream<LoginState> _mapToResetPassword(String email) async* {
+    yield LoginState.loading();
+    try {
+      await _authRepository.resetPassword(email);
+      yield LoginState.reset();
+    } catch (_) {
       yield LoginState.failure();
     }
   }
@@ -38,16 +49,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 //state
 class LoginState {
   final bool isSubmitting;
+  final bool isReset;
   final bool isSuccess;
   final bool isFailure;
 
-  LoginState({this.isSubmitting, this.isFailure, this.isSuccess});
+  LoginState({this.isSubmitting, this.isReset, this.isFailure, this.isSuccess});
 
   factory LoginState.empty() {
     return LoginState(
       isSubmitting: false,
       isFailure: false,
       isSuccess: false,
+      isReset: false,
     );
   }
 
@@ -56,11 +69,13 @@ class LoginState {
       isSubmitting: true,
       isFailure: false,
       isSuccess: false,
+      isReset: false,
     );
   }
 
   factory LoginState.failure() {
     return LoginState(
+      isReset: false,
       isSubmitting: false,
       isSuccess: false,
       isFailure: true,
@@ -69,8 +84,18 @@ class LoginState {
 
   factory LoginState.success() {
     return LoginState(
+      isReset: false,
       isSubmitting: false,
       isSuccess: true,
+      isFailure: false,
+    );
+  }
+
+  factory LoginState.reset() {
+    return LoginState(
+      isReset: true,
+      isSubmitting: false,
+      isSuccess: false,
       isFailure: false,
     );
   }
@@ -82,6 +107,15 @@ abstract class LoginEvent extends Equatable {
 
   @override
   List<Object> get props => [];
+}
+
+class ResetPassword extends LoginEvent {
+  final String email;
+
+  const ResetPassword(this.email);
+
+  @override
+  List<Object> get props => [email];
 }
 
 class LoginWithCredentialsPressed extends LoginEvent {
