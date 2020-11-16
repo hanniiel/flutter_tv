@@ -48,3 +48,4 @@ app.*.map.json
 .env
 android/app/google-services.json
 lib/environment.dart
+web/firebase_config.js

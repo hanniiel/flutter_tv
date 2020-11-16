@@ -102,55 +102,60 @@ class VideoScreen extends StatelessWidget {
                     return AnimatedOpacity(
                       opacity: state is ControlsStateInvisible ? 0.0 : 1.0,
                       duration: Duration(milliseconds: 300),
-                      child: Scaffold(
-                        backgroundColor: Colors.black.withOpacity(0.5),
-                        body: Align(
-                          alignment: Alignment(0, 0.9),
-                          child: Ink(
-                            height: 80,
-                            color: Colors.black,
-                            child: FocusScope(
-                              autofocus: true,
-                              onKey: BlocProvider.of<ControlsBloc>(context)
-                                  .onKeyEvent,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  IconButton(
-                                    iconSize: 30,
-                                    focusColor: Colors.white.withOpacity(0.2),
-                                    color: Colors.white,
-                                    onPressed: () {
-                                      BlocProvider.of<VideoBloc>(context)
-                                          .add(VideoEvent.RWD);
-                                    },
-                                    icon: Icon(Icons.fast_rewind),
-                                  ),
-                                  IconButton(
-                                    iconSize: 40,
-                                    focusColor: Colors.white.withOpacity(0.2),
-                                    color: Colors.white,
-                                    onPressed: () {
-                                      BlocProvider.of<VideoBloc>(context)
-                                          .add(VideoEvent.PLAY_PAUSE);
-                                    },
-                                    icon: Icon(
-                                      playerController.value.isPlaying
-                                          ? Icons.pause
-                                          : Icons.play_arrow,
+                      child: MouseRegion(
+                        onHover: (_) {
+                          BlocProvider.of<ControlsBloc>(context).onHover();
+                        },
+                        child: Scaffold(
+                          backgroundColor: Colors.black.withOpacity(0.5),
+                          body: Align(
+                            alignment: Alignment(0, 0.9),
+                            child: Ink(
+                              height: 80,
+                              color: Colors.black,
+                              child: FocusScope(
+                                autofocus: true,
+                                onKey: BlocProvider.of<ControlsBloc>(context)
+                                    .onKeyEvent,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    IconButton(
+                                      iconSize: 30,
+                                      focusColor: Colors.white.withOpacity(0.2),
+                                      color: Colors.white,
+                                      onPressed: () {
+                                        BlocProvider.of<VideoBloc>(context)
+                                            .add(VideoEvent.RWD);
+                                      },
+                                      icon: Icon(Icons.fast_rewind),
                                     ),
-                                  ),
-                                  IconButton(
-                                    iconSize: 30,
-                                    focusColor: Colors.white.withOpacity(0.2),
-                                    color: Colors.white,
-                                    onPressed: () {
-                                      BlocProvider.of<VideoBloc>(context)
-                                          .add(VideoEvent.FFW);
-                                    },
-                                    icon: Icon(Icons.fast_forward),
-                                  ),
-                                ],
+                                    IconButton(
+                                      iconSize: 40,
+                                      focusColor: Colors.white.withOpacity(0.2),
+                                      color: Colors.white,
+                                      onPressed: () {
+                                        BlocProvider.of<VideoBloc>(context)
+                                            .add(VideoEvent.PLAY_PAUSE);
+                                      },
+                                      icon: Icon(
+                                        playerController.value.isPlaying
+                                            ? Icons.pause
+                                            : Icons.play_arrow,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      iconSize: 30,
+                                      focusColor: Colors.white.withOpacity(0.2),
+                                      color: Colors.white,
+                                      onPressed: () {
+                                        BlocProvider.of<VideoBloc>(context)
+                                            .add(VideoEvent.FFW);
+                                      },
+                                      icon: Icon(Icons.fast_forward),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
