@@ -17,6 +17,7 @@ dependencies:
   video_player: ^0.10.12+2
   http: ^0.12.2
   firebase_core: ^0.5.0
+  firebase_auth: ^0.18.3
   cloud_firestore: ^0.14.0+2
   platform_svg: ^0.0.1
   #bloc
