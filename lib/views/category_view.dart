@@ -6,6 +6,7 @@ import 'package:flutter_tv/components/core/focus_base.dart';
 import 'package:flutter_tv/components/focus_widget.dart';
 import 'package:flutter_tv/components/home_section.dart';
 import 'package:flutter_tv/models/category_entity.dart';
+import 'package:flutter_tv/models/descriptions.dart';
 import 'package:flutter_tv/models/training_entity.dart';
 import 'package:flutter_tv/utils/KeyEventHandler.dart';
 import 'package:flutter_tv/utils/UrlImage.dart';
@@ -53,7 +54,7 @@ class CategoryScreen extends StatelessWidget {
                   var key = lista.keys.elementAt(index);
                   var ts = lista[key];
                   return HomeSection(
-                    title: key.toUpperCase(),
+                    title: descriptions[key].toUpperCase(),
                     section: Container(
                       height: 250,
                       child: ListView.builder(
