@@ -41,6 +41,10 @@ class ControlsBloc extends Bloc<ControlsEvent, ControlsState> {
     yield ControlsStateInvisible();
   }
 
+  void onHover() {
+    add(ControlsEvent.CANCEL);
+  }
+
   ///Handle control input events
   bool onKeyEvent(FocusNode f, RawKeyEvent e) {
     if (e is RawKeyDownEvent) {

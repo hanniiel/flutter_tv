@@ -6,6 +6,7 @@ import 'package:flutter_tv/bloc/bloc_popular.dart';
 import 'package:flutter_tv/components/card_category_tv.dart';
 import 'package:flutter_tv/components/card_program_tv.dart';
 import 'package:flutter_tv/components/card_tv.dart';
+import 'package:flutter_tv/components/core/focus_base.dart';
 import 'package:flutter_tv/components/focus_widget.dart';
 import 'package:flutter_tv/components/home_section.dart';
 import 'package:flutter_tv/utils/KeyEventHandler.dart';
@@ -30,118 +31,88 @@ class HomeScreen extends StatelessWidget {
             builder: (_, state) {
               // ignore: missing_return
 
-              if (state is NewestStateLoaded) {
-                var trainings = state.trainings;
-                return Container(
-                  height: 250,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: trainings.length,
-                    itemBuilder: (context, index) {
-                      var training = trainings[index];
-                      training.cover = 'covers/tv.jpeg';
-                      training.name = 'Inicial cardio y resistencia';
-                      return FocusWidget(
-                        customWidget: CardProgramTv(
-                          isFocused: training.isFocused,
-                          title: training.name,
-                          cover: UrlImage.getUrl(training.cover),
-                        ),
-                        event: (event) {
-                          onKeyEvent(event, enter: () {
-                            //navigate to details card
-                            Navigator.pushNamed(context, ProgramDetailScreen.id,
-                                arguments: training);
-                          });
+                  if (state is NewestStateLoaded) {
+                    var trainings = state.trainings;
+                    return Container(
+                      height: 250,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: trainings.length,
+                        itemBuilder: (context, index) {
+                          var training = trainings[index];
+                          return FocusBaseWidget(
+                            onFocus: (isFocused) {},
+                            onPressed: () {
+                              Navigator.pushNamed(context, DetailScreen.id,
+                                  arguments: training);
+                            },
+                            title: training.name,
+                            cover: UrlImage.getUrl(training.cover),
+                          );
                         },
-                        hasFocus: (hasFocus) {
-                          BlocProvider.of<NewestBloc>(context).add(
-                              NewestEventFocusChanged(
-                                  training.copyWith(isFocused: hasFocus)));
-                        },
-                      );
-                    },
-                  ),
-                );
-              }
-              return Center(child: CircularProgressIndicator());
-            },
-          ),
-        ),
-        HomeSection(
-          title: 'CATEGORÍAS',
-          section: BlocBuilder<CategoriesBloc, CategoryState>(
-            // ignore: missing_return
-            builder: (_, state) {
-              if (state is CategoryStateLoaded) {
-                var categories = state.categories;
-                return Container(
-                  height: 150,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: categories.length,
-                      itemBuilder: (context, index) {
-                        var category = categories[index];
-                        return FocusWidget(
-                          customWidget: CardCategoryTv(
-                            isFocused: category.isFocused,
-                            cover: UrlImage.getUrl(category.cover),
-                            icon: category.icon,
-                            title: category.name,
-                          ),
-                          event: (event) {
-                            onKeyEvent(event, enter: () {
-                              //navigate to selected category
-                              Navigator.pushNamed(context, CategoryScreen.id,
-                                  arguments: category);
-                            });
-                          },
-                          hasFocus: (hasFocus) {
-                            BlocProvider.of<CategoriesBloc>(context).add(
-                                CategoryEventFocusChanged(
-                                    category.copyWith(isFocused: hasFocus)));
-                          },
-                        );
-                      }),
-                );
-              }
-              return Center(child: CircularProgressIndicator());
-            },
-          ),
-        ),
-        HomeSection(
-          title: 'POPULARES',
-          section: BlocBuilder<PopularBloc, PopularState>(
-            // ignore: missing_return
-            builder: (_, state) {
-              // ignore: missing_return
+                      ),
+                    );
+                  }
+                  return Center(child: CircularProgressIndicator());
+                },
+              ),
+            ),
+            HomeSection(
+              title: 'CATEGORÍAS',
+              section: BlocBuilder<CategoriesBloc, CategoryState>(
+                // ignore: missing_return
+                builder: (_, state) {
+                  if (state is CategoryStateLoaded) {
+                    var categories = state.categories;
+                    return Container(
+                      height: 150,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: categories.length,
+                          itemBuilder: (context, index) {
+                            var category = categories[index];
+                            return CardCategoryTv(
+                              cover: UrlImage.getUrl(category.cover),
+                              icon: category.icon,
+                              title: category.name,
+                              onPressed: () {
+                                Navigator.pushNamed(context, CategoryScreen.id,
+                                    arguments: category);
+                              },
+                              onFocus: (hasFocus) {},
+                            );
+                          }),
+                    );
+                  }
+                  return Center(child: CircularProgressIndicator());
+                },
+              ),
+            ),
+            HomeSection(
+              title: 'POPULARES',
+              section: BlocBuilder<PopularBloc, PopularState>(
+                // ignore: missing_return
+                builder: (_, state) {
+                  // ignore: missing_return
 
-              if (state is PopularStateLoaded) {
-                var trainings = state.trainings;
-                return Container(
-                  height: 250,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: trainings.length,
-                    itemBuilder: (context, index) {
-                      var training = trainings[index];
-                      return FocusWidget(
-                        customWidget: CardTv(
-                          isFocused: training.isFocused,
-                          title: training.name,
-                          cover: UrlImage.getUrl(training.cover),
-                        ),
-                        event: (event) {
-                          onKeyEvent(event, enter: () {
-                            //navigate to details card
-                            Navigator.pushNamed(context, DetailScreen.id,
-                                arguments: training);
-                          });
-                        },
-                        hasFocus: (hasFocus) {
-                          BlocProvider.of<PopularBloc>(context).add(
-                              PopularEventFocusChanged(
-                                  training.copyWith(isFocused: hasFocus)));
+                  if (state is PopularStateLoaded) {
+                    var trainings = state.trainings;
+                    return Container(
+                      height: 250,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: trainings.length,
+                        itemBuilder: (context, index) {
+                          var training = trainings[index];
+                          return FocusBaseWidget(
+                            onFocus: (isFocused) {},
+                            onPressed: () {
+                              Navigator.pushNamed(context, DetailScreen.id,
+                                  arguments: training);
+                            },
+                            title: training.name,
+                            cover: UrlImage.getUrl(training.cover),
+                          );
                         },
                       );
                     },

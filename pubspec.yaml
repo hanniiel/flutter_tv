@@ -18,7 +18,7 @@ dependencies:
   http: ^0.12.2
   firebase_core: ^0.5.0
   cloud_firestore: ^0.14.0+2
-  flutter_svg: ^0.19.0
+  platform_svg: ^0.0.1
   #bloc
   flutter_bloc: ^6.0.5
   equatable: ^1.2.4

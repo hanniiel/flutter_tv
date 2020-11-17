@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:flutter_tv/components/progress_player_custom.dart';
 import 'package:flutter_tv/constants/constants.dart';
 import 'package:flutter_tv/models/subtitle.dart';
 import 'package:flutter_tv/utils/captions_helper.dart';
 import 'package:flutter_tv/utils/format_time.dart';
+import 'package:platform_svg/platform_svg.dart';
 
 class BloqueWidget extends StatelessWidget {
   final SubtitleInfo header;
@@ -43,7 +43,7 @@ class BloqueWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        SvgPicture.asset(
+                        PlatformSvg.asset(
                           'assets/icons/bloques/$title.svg',
                           height: 30,
                           alignment: Alignment.center,
