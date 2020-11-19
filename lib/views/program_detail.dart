@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_tv/components/card_program_tv.dart';
 import 'package:flutter_tv/components/core/focus_base.dart';
 import 'package:flutter_tv/constants/constants.dart';
+import 'package:flutter_tv/models/program/program_entity.dart';
+import 'package:flutter_tv/utils/UrlImage.dart';
 
 mixin Cards {
   List<FocusScopeNode> elements;
@@ -22,6 +24,8 @@ class ProgramDetailScreen extends StatelessWidget implements Cards {
 
   @override
   Widget build(BuildContext context) {
+    final ProgramEntity program = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
@@ -34,8 +38,7 @@ class ProgramDetailScreen extends StatelessWidget implements Cards {
                     (MediaQuery.of(context).size.height / 3),
                 child: Ink.image(
                   fit: BoxFit.cover,
-                  image: NetworkImage(
-                      'https://firebasestorage.googleapis.com/v0/b/fitflow-87a22.appspot.com/o/covers%2Ftv.jpeg?alt=media'),
+                  image: NetworkImage(UrlImage.getUrl(program.cover)),
                 ),
               ),
             ),
@@ -53,7 +56,7 @@ class ProgramDetailScreen extends StatelessWidget implements Cards {
                   children: [
                     SizedBox(height: 10),
                     Text(
-                      'Inicial cardio y resistencia',
+                      program.title,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.start,
@@ -62,7 +65,7 @@ class ProgramDetailScreen extends StatelessWidget implements Cards {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'workout basado en flexiones para trabajar',
+                      program.description,
                       textAlign: TextAlign.justify,
                       style: kDescriptionScroll.copyWith(fontSize: 23),
                     ),

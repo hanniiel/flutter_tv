@@ -97,10 +97,12 @@ class _CardProgramTvState extends State<CardProgramTv> {
                     alignment: Alignment.center,
                     color: widget.isProgram ? Colors.white : Color(0xFF50BCFF),
                     height: 35,
-                    width: 112,
+                    width: 150,
                     child: Text(
                       widget.category,
+                      textAlign: TextAlign.center,
                       style: kTitleMenuStyle.copyWith(
+                          fontWeight: FontWeight.bold,
                           color:
                               widget.isProgram ? Colors.black : Colors.white),
                     ),

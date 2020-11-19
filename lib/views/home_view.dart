@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tv/bloc/bloc_categories.dart';
 import 'package:flutter_tv/bloc/bloc_newest.dart';
 import 'package:flutter_tv/bloc/bloc_popular.dart';
+import 'package:flutter_tv/bloc/program/bloc_programs.dart';
 import 'package:flutter_tv/components/card_category_tv.dart';
 import 'package:flutter_tv/components/card_program_tv.dart';
 import 'package:flutter_tv/components/focus_text.dart';
@@ -65,9 +66,9 @@ class HomeScreen extends StatelessWidget {
                     focusColor: Colors.white10,
                     onPressed: () {},
                     child: Container(
-                      height: 266,
+                      height: 150,
                       child: Ink.image(
-                        fit: BoxFit.fill,
+                        fit: BoxFit.cover,
                         image: NetworkImage(
                             'https://firebasestorage.googleapis.com/v0/b/fitflow-87a22.appspot.com/o/avatars%2F1-1%20banner.jpg?alt=media'),
                       ),
@@ -78,21 +79,21 @@ class HomeScreen extends StatelessWidget {
             ),
             HomeSection(
               title: 'PROGRAMAS',
-              section: BlocBuilder<NewestBloc, NewestState>(
+              section: BlocBuilder<ProgramsBloc, ProgramsState>(
                 // ignore: missing_return
                 builder: (_, state) {
                   // ignore: missing_return
 
-                  if (state is NewestStateLoaded) {
-                    var trainings = state.trainings;
+                  if (state is ProgramsStateLoaded) {
+                    var programs = state.programs;
 
                     return Container(
                       height: 250,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: trainings.length,
+                        itemCount: programs.length,
                         itemBuilder: (context, index) {
-                          var training = trainings[index];
+                          var program = programs[index];
 
                           return CardProgramTv(
                             isProgram: true,
@@ -100,15 +101,15 @@ class HomeScreen extends StatelessWidget {
                             onPressed: () {
                               Navigator.pushNamed(
                                   context, ProgramDetailScreen.id,
-                                  arguments: training);
+                                  arguments: program);
                             },
-                            category: cats
-                                .singleWhere((element) =>
-                                    element.id == training.category)
+                            category: initializer.programCats
+                                .singleWhere(
+                                    (element) => element.id == program.category)
                                 .name
                                 .toUpperCase(),
-                            title: training.name,
-                            cover: UrlImage.getUrl(training.cover),
+                            title: program.title,
+                            cover: UrlImage.getUrl(program.cover),
                           );
                         },
                       ),

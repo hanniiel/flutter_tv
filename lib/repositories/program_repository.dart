@@ -7,6 +7,7 @@ abstract class ProgramRepository {
   Stream<List<ProgramCatEntity>> getCategories();
   Future<List<ProgramEntity>> getProgramsByCatId(String catId);
   Future<ProgramEntity> getProgramById(String programId);
+  Stream<List<ProgramEntity>> getProgramAll();
 }
 
 class ProgramFireRepository extends ProgramRepository {
@@ -37,5 +38,11 @@ class ProgramFireRepository extends ProgramRepository {
     return result.exists
         ? ProgramEntity.fromSnap(result)
         : null; //get default program not assigned
+  }
+
+  @override
+  Stream<List<ProgramEntity>> getProgramAll() {
+    return programs.snapshots().map(
+        (event) => event.docs.map((e) => ProgramEntity.fromSnap(e)).toList());
   }
 }

@@ -12,12 +12,14 @@ import 'package:flutter_tv/bloc/bloc_overlay.dart';
 import 'package:flutter_tv/bloc/bloc_popular.dart';
 import 'package:flutter_tv/bloc/bloc_video.dart';
 import 'package:flutter_tv/bloc/bloc_video_controls.dart';
+import 'package:flutter_tv/bloc/program/bloc_programs.dart';
 import 'package:flutter_tv/bloc/simple_bloc_observer.dart';
 import 'package:flutter_tv/models/initializer.dart';
 import 'package:flutter_tv/models/training_entity.dart';
 import 'package:flutter_tv/repositories/category_reposityory.dart';
 import 'package:flutter_tv/repositories/coach_repository.dart';
 import 'package:flutter_tv/repositories/equipment_repository.dart';
+import 'package:flutter_tv/repositories/program_repository.dart';
 import 'package:flutter_tv/repositories/training_repository.dart';
 import 'package:flutter_tv/views/category_view.dart';
 import 'package:flutter_tv/views/detail_view.dart';
@@ -45,6 +47,7 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(create: (context) => CategoryFireStoreRepository()),
         RepositoryProvider(create: (context) => EquipmentFireRepository()),
         RepositoryProvider(create: (context) => CoachFireRepository()),
+        RepositoryProvider(create: (context) => ProgramFireRepository()),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -65,6 +68,11 @@ class MyApp extends StatelessWidget {
               create: (context) => CategoriesBloc(
                   context.repository<CategoryFireStoreRepository>())
                 ..add(CategoryEventLoad())),
+          BlocProvider(
+            create: (context) =>
+                ProgramsBloc(context.repository<ProgramFireRepository>())
+                  ..add(ProgramsEvent.LOAD),
+          ),
           BlocProvider<NewestBloc>(
             //lazy: false,
             create: (context) =>

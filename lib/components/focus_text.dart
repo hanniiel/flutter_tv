@@ -55,7 +55,7 @@ class _FocusTextWidgetState extends State<FocusTextWidget> {
             widget.title,
             textScaleFactor: 1,
             style: kTitleHomeMenu.copyWith(
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.normal,
               fontSize: 24,
               height: 1,
             ),
