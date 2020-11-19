@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_tv/components/focus_base.dart';
+import 'package:flutter_tv/components/card_program_tv.dart';
+import 'package:flutter_tv/components/core/focus_base.dart';
 import 'package:flutter_tv/constants/constants.dart';
 
 mixin Cards {
@@ -132,7 +133,7 @@ class ProgramDetailScreen extends StatelessWidget implements Cards {
                     itemCount: 5,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (_, index) {
-                      return FocusBaseWidget(
+                      return CardProgramTv(
                         title: 'some title $index',
                         onPressed: () {},
                         onFocus: (isFocused) {},

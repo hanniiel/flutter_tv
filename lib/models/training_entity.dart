@@ -13,7 +13,7 @@ class TrainingEntity extends Equatable {
   String difficulty;
   String cover;
   String coverFull;
-  List equipment;
+  List<String> equipment;
   List bloques;
   List<dynamic> series;
   DocumentReference trainer;
@@ -39,7 +39,7 @@ class TrainingEntity extends Equatable {
       cover: snapshot.data()['cover'],
       coverFull: snapshot.data()['coverFull'],
       trainer: snapshot.data()['trainer'],
-      equipment: snapshot.data()['equipment'],
+      equipment: List<String>.from(snapshot.data()['equipment']),
       active: snapshot.data()['isActive'],
       category: snapshot.data()['category'],
       videoId: snapshot.data()['video'],
@@ -64,6 +64,7 @@ class TrainingEntity extends Equatable {
       calories: calories,
       difficulty: difficulty,
       cover: cover,
+      active: active,
       coverFull: coverFull,
       trainer: trainer,
       equipment: equipment,

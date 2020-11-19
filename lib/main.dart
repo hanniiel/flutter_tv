@@ -5,14 +5,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tv/bloc/bloc_categories.dart';
 import 'package:flutter_tv/bloc/bloc_category_selector.dart';
+import 'package:flutter_tv/bloc/bloc_coaches.dart';
+import 'package:flutter_tv/bloc/bloc_equipment.dart';
 import 'package:flutter_tv/bloc/bloc_newest.dart';
 import 'package:flutter_tv/bloc/bloc_overlay.dart';
 import 'package:flutter_tv/bloc/bloc_popular.dart';
 import 'package:flutter_tv/bloc/bloc_video.dart';
 import 'package:flutter_tv/bloc/bloc_video_controls.dart';
 import 'package:flutter_tv/bloc/simple_bloc_observer.dart';
+import 'package:flutter_tv/models/initializer.dart';
 import 'package:flutter_tv/models/training_entity.dart';
 import 'package:flutter_tv/repositories/category_reposityory.dart';
+import 'package:flutter_tv/repositories/coach_repository.dart';
+import 'package:flutter_tv/repositories/equipment_repository.dart';
 import 'package:flutter_tv/repositories/training_repository.dart';
 import 'package:flutter_tv/views/category_view.dart';
 import 'package:flutter_tv/views/detail_view.dart';
@@ -26,6 +31,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = SimpleBlocObserver();
   await Firebase.initializeApp();
+  await Initializer().init();
 
   runApp(MyApp());
 }
@@ -37,9 +43,28 @@ class MyApp extends StatelessWidget {
       providers: [
         RepositoryProvider(create: (context) => TrainingFireStoreRepository()),
         RepositoryProvider(create: (context) => CategoryFireStoreRepository()),
+        RepositoryProvider(create: (context) => EquipmentFireRepository()),
+        RepositoryProvider(create: (context) => CoachFireRepository()),
       ],
       child: MultiBlocProvider(
         providers: [
+          BlocProvider(
+            lazy: false,
+            create: (context) =>
+                EquipmentBloc(context.repository<EquipmentFireRepository>())
+                  ..add(EquipmentEvent.LOAD),
+          ),
+          BlocProvider(
+            lazy: false,
+            create: (context) =>
+                CoachesBloc(context.repository<CoachFireRepository>())
+                  ..add(CoachEvent.LOAD),
+          ),
+          BlocProvider(
+              lazy: false,
+              create: (context) => CategoriesBloc(
+                  context.repository<CategoryFireStoreRepository>())
+                ..add(CategoryEventLoad())),
           BlocProvider<NewestBloc>(
             //lazy: false,
             create: (context) =>
@@ -52,10 +77,6 @@ class MyApp extends StatelessWidget {
                 PopularBloc(context.repository<TrainingFireStoreRepository>())
                   ..add(PopularEventLoad()),
           ),
-          BlocProvider(
-              create: (context) => CategoriesBloc(
-                  context.repository<CategoryFireStoreRepository>())
-                ..add(CategoryEventLoad()))
         ],
         child: Shortcuts(
           shortcuts: <LogicalKeySet, Intent>{
