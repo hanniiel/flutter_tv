@@ -17,7 +17,7 @@ Flutter App for Android TV
 ## Plugins implemented
 <ul>
 	<li>video_player</li>
-	<li>flutter_blog</li>
+	<li>flutter_bloc</li>
 	<li>equatable</li>
 	<li>flutter svg</li>
 </ul>
