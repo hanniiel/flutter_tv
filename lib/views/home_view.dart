@@ -56,7 +56,7 @@ class HomeScreen extends StatelessWidget {
           padding: EdgeInsets.only(top: 100, left: 20, right: 20),
           children: <Widget>[
             HomeSection(
-              title: 'CLASE DIAGNÓSTICO 1-1 EN VIVO',
+              title: 'CLASES 1-1 EN VIVO',
               section: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: ClipRRect(
@@ -88,7 +88,7 @@ class HomeScreen extends StatelessWidget {
                     var programs = state.programs;
 
                     return Container(
-                      height: 250,
+                      height: 350,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: programs.length,
@@ -98,16 +98,13 @@ class HomeScreen extends StatelessWidget {
                           return CardProgramTv(
                             isProgram: true,
                             onFocus: (isFocused) {},
+                            coverText: UrlImage.getUrl(program.coverText),
                             onPressed: () {
                               Navigator.pushNamed(
                                   context, ProgramDetailScreen.id,
                                   arguments: program);
                             },
-                            category: initializer.programCats
-                                .singleWhere(
-                                    (element) => element.id == program.category)
-                                .name
-                                .toUpperCase(),
+                            category: program.duration.toUpperCase(),
                             title: program.title,
                             cover: UrlImage.getUrl(program.cover),
                           );

@@ -43,26 +43,57 @@ class _CardCategoryTvState extends State<CardCategoryTv> {
 
   @override
   Widget build(BuildContext context) {
-    return Transform.scale(
-      scale: focusNode.hasFocus ? 1.0 : 0.9,
+    return Padding(
+      padding: EdgeInsets.only(right: 20),
       child: RawMaterialButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         focusNode: focusNode,
         onPressed: widget.onPressed,
-        child: Container(
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
           decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(10),
-              image: DecorationImage(
-                  image: NetworkImage(widget.cover), fit: BoxFit.fill)),
+            border: Border.all(
+                width: focusNode.hasFocus ? 1 : 0, color: Color(0xFF4EBEFF)),
+            borderRadius: BorderRadius.circular(10),
+          ),
           width: 300,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          height: double.infinity,
+          child: Stack(
+            fit: StackFit.expand,
             children: [
-              Text(
-                widget.title.toUpperCase(),
-                textScaleFactor: 1,
-                style: kTitleCardStyle,
+              Positioned.fill(
+                child: Ink.image(
+                  image: NetworkImage(widget.cover),
+                ),
+              ),
+              Container(
+                color: Colors.black38,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      widget.title.toUpperCase(),
+                      textScaleFactor: 1,
+                      style: kTitleCardStyle.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 40,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    SizedBox(
+                      height: 80,
+                      child: VerticalDivider(
+                        width: 10,
+                        color: Colors.white,
+                        thickness: 5,
+                      ),
+                    )
+                  ],
+                ),
               )
             ],
           ),

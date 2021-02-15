@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_tv/constants/constants.dart';
 
 class CardProgramTv extends StatefulWidget {
-  final String title, category, cover;
+  final String title, category, cover, coverText;
   final Function onPressed;
   final Function(bool) onFocus;
   final bool isProgram;
@@ -15,6 +15,7 @@ class CardProgramTv extends StatefulWidget {
     this.category = 'Fuerza',
     this.cover =
         'https://firebasestorage.googleapis.com/v0/b/fitflow-87a22.appspot.com/o/covers%2Fcard_cover_42.png?alt=media',
+    this.coverText,
     this.onPressed,
     this.onFocus,
   });
@@ -45,71 +46,120 @@ class _CardProgramTvState extends State<CardProgramTv> {
 
   @override
   Widget build(BuildContext context) {
-    return Transform.scale(
-      scale: focusNode.hasFocus ? 1.0 : 0.9,
-      child: RawMaterialButton(
-        onPressed: widget.onPressed,
-        focusNode: focusNode,
-        fillColor: Colors.black,
-        child: Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.white, width: 0.5)),
-          width: 350,
-          child: Stack(
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Ink.image(
-                      image: NetworkImage(widget.cover),
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    height: focusNode.hasFocus ? 80 : 40,
-                    width: double.infinity,
-                    color: focusNode.hasFocus
-                        ? Color(0xFF4EBEFF)
-                        : Color(0xFF2F384B),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            widget.title,
-                            maxLines: focusNode.hasFocus ? 2 : 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
-                            textScaleFactor: 0.7,
-                            style: kTitleCardStyle,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              Positioned.fill(
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Container(
-                    alignment: Alignment.center,
-                    color: widget.isProgram ? Colors.white : Color(0xFF50BCFF),
-                    height: 35,
-                    width: 150,
-                    child: Text(
-                      widget.category,
-                      textAlign: TextAlign.center,
-                      style: kTitleMenuStyle.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color:
-                              widget.isProgram ? Colors.black : Colors.white),
-                    ),
+    return Padding(
+      padding: EdgeInsets.only(right: 20),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(widget.isProgram ? 10 : 0),
+        child: RawMaterialButton(
+          onPressed: widget.onPressed,
+          focusNode: focusNode,
+          fillColor: Colors.black,
+          child: AnimatedContainer(
+            width: widget.isProgram ? 220 : 350,
+            duration: Duration(milliseconds: 500),
+            transform: !focusNode.hasFocus
+                ? (Matrix4.identity()..scale(0.95, 0.95))
+                : Matrix4.identity(),
+            curve: Curves.easeInOut,
+            decoration: BoxDecoration(
+              border: Border.all(
+                  color: focusNode.hasFocus
+                      ? widget.isProgram
+                          ? Color(0xFF4EBEFF)
+                          : Colors.white.withOpacity(0.5)
+                      : Colors.white.withOpacity(0.5),
+                  width: 1),
+              borderRadius: BorderRadius.circular(widget.isProgram ? 10 : 0),
+            ),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                ///bg
+                Positioned.fill(
+                  child: Ink.image(
+                    image: NetworkImage(widget.cover),
+                    fit: BoxFit.cover,
                   ),
                 ),
-              ),
-            ],
+
+                ///cover text
+                if (widget.coverText != null)
+                  Positioned.fill(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: SizedBox(
+                        width: 120,
+                        child: Image.network(widget.coverText),
+                      ),
+                    ),
+                  ),
+
+                ///cat text
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: widget.isProgram
+                        ? Padding(
+                            padding: EdgeInsets.only(left: 10, top: 10),
+                            child: Chip(
+                              visualDensity: VisualDensity.compact,
+                              label: Text(
+                                widget.category,
+                                style: kTitleMenuStyle.copyWith(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              backgroundColor: Colors.white,
+                            ),
+                          )
+                        : Container(
+                            alignment: Alignment.center,
+                            color: Colors.white,
+                            height: 35,
+                            width: 150,
+                            child: Text(
+                              widget.category,
+                              textAlign: TextAlign.center,
+                              style: kTitleMenuStyle.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                  ),
+                ),
+                if (!widget.isProgram)
+                  Positioned.fill(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        height: focusNode.hasFocus ? 80 : 40,
+                        width: double.infinity,
+                        color: focusNode.hasFocus
+                            ? Color(0xFF4EBEFF)
+                            : Color(0xFF2F384B),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                widget.title,
+                                maxLines: focusNode.hasFocus ? 2 : 1,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.left,
+                                textScaleFactor: 0.7,
+                                style: kTitleCardStyle,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),

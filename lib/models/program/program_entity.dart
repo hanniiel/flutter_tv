@@ -7,6 +7,7 @@ class ProgramEntity {
   final String category;
   final String duration;
   final String cover;
+  final String coverText;
   //
   List<dynamic> routine;
 
@@ -17,6 +18,7 @@ class ProgramEntity {
     this.category,
     this.duration,
     this.cover,
+    this.coverText,
     this.routine,
   });
 
@@ -28,6 +30,7 @@ class ProgramEntity {
       description: snapshot.data()['description'],
       duration: snapshot.data()['weeks'],
       cover: snapshot.data()['cover'],
+      coverText: snapshot.data()['cover_text'],
       routine: snapshot.data()['exercises'],
     );
   }

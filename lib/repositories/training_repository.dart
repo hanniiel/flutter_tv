@@ -61,7 +61,7 @@ class TrainingFireStoreRepository extends TrainingRepository {
   @override
   Stream<List<TrainingEntity>> getPopular() {
     return _reference
-        .where('isPopular', isEqualTo: true)
+        .where('isNew', isEqualTo: true)
         .where('isActive', isEqualTo: true)
         .limit(5)
         .snapshots()

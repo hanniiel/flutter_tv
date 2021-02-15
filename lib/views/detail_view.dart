@@ -120,6 +120,7 @@ class DetailScreen extends StatelessWidget {
                     Navigator.pushNamed(context, VideoScreen.id,
                         arguments: training);
                   },
+                  autofocus: true,
                   focusColor: Colors.black,
                   child: Text(
                     'REPRODUCIR',

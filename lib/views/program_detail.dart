@@ -72,54 +72,55 @@ class ProgramDetailScreen extends StatelessWidget implements Cards {
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: FocusScope(
-                  autofocus: true,
-                  node: selection,
-                  onKey: (f, k) {
-                    if (k is RawKeyDownEvent &&
-                        k.logicalKey == LogicalKeyboardKey.arrowDown) {
-                      print('requestibg asd');
-                      list.requestFocus();
-                    }
-                    return false;
-                  },
+              FocusScope(
+                autofocus: true,
+                node: selection,
+                onKey: (f, k) {
+                  if (k is RawKeyDownEvent &&
+                      k.logicalKey == LogicalKeyboardKey.arrowDown) {
+                    print('requestibg asd');
+                    list.requestFocus();
+                  }
+                  return false;
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  height: 50,
+                  color: Color(0xFF2D2D2D),
                   child: Row(
                     children: [
                       MaterialButton(
                         onPressed: () {},
-                        focusColor: Colors.white,
-                        color: Color(0xFF2F384B),
+                        autofocus: true,
+                        focusColor: Colors.black,
                         child: Text(
                           'SEMANA 1',
-                          style: kTitleDescriptions,
+                          style: kTitleMenuStyle,
                         ),
                       ),
                       SizedBox(width: 10),
                       MaterialButton(
                         onPressed: () {},
-                        focusColor: Colors.white,
-                        color: Color(0xFF2F384B),
+                        focusColor: Colors.black,
                         child: Text(
                           'SEMANA 2',
-                          style: kTitleDescriptions,
+                          style: kTitleMenuStyle,
                         ),
                       ),
                       SizedBox(width: 10),
                       MaterialButton(
                         onPressed: () {},
-                        focusColor: Colors.white,
-                        color: Color(0xFF2F384B),
+                        focusColor: Colors.black,
                         child: Text(
                           'SEMANA 3',
-                          style: kTitleDescriptions,
+                          style: kTitleMenuStyle,
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
+              SizedBox(height: 20),
               Container(
                 height: 300,
                 padding: EdgeInsets.all(10),
