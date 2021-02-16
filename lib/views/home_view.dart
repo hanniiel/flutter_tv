@@ -14,6 +14,7 @@ import 'package:flutter_tv/models/initializer.dart' as initializer;
 import 'package:flutter_tv/utils/UrlImage.dart';
 import 'package:flutter_tv/views/category_view.dart';
 import 'package:flutter_tv/views/detail_view.dart';
+import 'package:flutter_tv/views/empty_view.dart';
 import 'package:flutter_tv/views/program_detail.dart';
 import 'package:flutter_tv/utils/string_extension.dart';
 
@@ -64,7 +65,9 @@ class HomeScreen extends StatelessWidget {
                   child: MaterialButton(
                     padding: EdgeInsets.zero,
                     focusColor: Colors.white10,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, EmptyView.id);
+                    },
                     child: Container(
                       height: 150,
                       child: Ink.image(

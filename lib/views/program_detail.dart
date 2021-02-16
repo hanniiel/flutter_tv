@@ -2,11 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_tv/bloc/program/bloc_program_detail.dart';
 import 'package:flutter_tv/components/card_program_tv.dart';
 import 'package:flutter_tv/components/core/focus_base.dart';
 import 'package:flutter_tv/constants/constants.dart';
 import 'package:flutter_tv/models/program/program_entity.dart';
+import 'package:flutter_tv/repositories/training_repository.dart';
 import 'package:flutter_tv/utils/UrlImage.dart';
+
+import 'detail_view.dart';
 
 mixin Cards {
   List<FocusScopeNode> elements;
@@ -25,7 +30,13 @@ class ProgramDetailScreen extends StatelessWidget implements Cards {
   @override
   Widget build(BuildContext context) {
     final ProgramEntity program = ModalRoute.of(context).settings.arguments;
+    List<String> trainingIds = [];
 
+    for (var i = 0; i < program.routine.length; i++) {
+      for (var j = 0; j < program.routine[i]['exercises'].length; j++) {
+        trainingIds.add(program.routine[i]['exercises'][j]);
+      }
+    }
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
@@ -72,7 +83,7 @@ class ProgramDetailScreen extends StatelessWidget implements Cards {
                   ],
                 ),
               ),
-              FocusScope(
+              /*FocusScope(
                 autofocus: true,
                 node: selection,
                 onKey: (f, k) {
@@ -119,33 +130,53 @@ class ProgramDetailScreen extends StatelessWidget implements Cards {
                     ],
                   ),
                 ),
-              ),
+              ),*/
               SizedBox(height: 20),
-              Container(
-                height: 300,
-                padding: EdgeInsets.all(10),
-                child: FocusScope(
-                  node: list,
-                  onKey: (f, k) {
-                    if (k is RawKeyDownEvent &&
-                        k.logicalKey == LogicalKeyboardKey.arrowUp) {
-                      selection.requestFocus();
-                    }
-                    return false;
-                  },
-                  child: ListView.builder(
-                    itemCount: 5,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (_, index) {
-                      return CardProgramTv(
-                        title: 'some title $index',
-                        onPressed: () {},
-                        onFocus: (isFocused) {},
-                      );
-                    },
-                  ),
-                ),
-              )
+              BlocProvider(
+                create: (context) => ProgramDBloc(
+                    trainingIds: trainingIds,
+                    trainingRepository:
+                        context.repository<TrainingFireStoreRepository>())
+                  ..add(ProgramDEvent.LOAD),
+                child: Container(
+                    height: 300,
+                    padding: EdgeInsets.all(10),
+                    child: FocusScope(
+                      node: list,
+                      onKey: (f, k) {
+                        if (k is RawKeyDownEvent &&
+                            k.logicalKey == LogicalKeyboardKey.arrowUp) {
+                          selection.requestFocus();
+                        }
+                        return false;
+                      },
+                      child: BlocBuilder<ProgramDBloc, ProgramDState>(
+                        builder: (_, state) {
+                          if (state is ProgramDStateLoaded) {
+                            return ListView.builder(
+                              itemCount: state.trainings.length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (_, index) {
+                                var training = state.trainings[index];
+
+                                return CardProgramTv(
+                                  title: training.name,
+                                  cover: UrlImage.getUrl(training.cover),
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                        context, DetailScreen.id,
+                                        arguments: training);
+                                  },
+                                  onFocus: (isFocused) {},
+                                );
+                              },
+                            );
+                          }
+                          return Center(child: CircularProgressIndicator());
+                        },
+                      ),
+                    )),
+              ),
             ],
           ),
         ],

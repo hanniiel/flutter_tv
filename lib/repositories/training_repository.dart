@@ -5,7 +5,7 @@ abstract class TrainingRepository {
   Stream<List<TrainingEntity>> getTrainings();
   Stream<List<TrainingEntity>> getPopular();
   Stream<List<TrainingEntity>> getNewest();
-  Stream<TrainingEntity> getTrainingById(String id);
+  Future<TrainingEntity> getTrainingById(String id);
   Stream<List<TrainingEntity>> getTrainingsByQuery(Map<String, dynamic> query);
   //interactions
   Stream<int> getRating(String uid, String trainingId);
@@ -19,8 +19,9 @@ class TrainingFireStoreRepository extends TrainingRepository {
   final _reference = FirebaseFirestore.instance.collection(_collection);
 
   @override
-  Stream<TrainingEntity> getTrainingById(String id) {
-    throw UnimplementedError();
+  Future<TrainingEntity> getTrainingById(String id) async {
+    var response = await _reference.doc(id).get();
+    return response.exists ? TrainingEntity.fromSnap(response) : null;
   }
 
   @override

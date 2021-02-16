@@ -8,21 +8,37 @@ import 'package:flutter_tv/repositories/training_repository.dart';
 class ProgramDBloc extends Bloc<ProgramDEvent, ProgramDState> {
   final TrainingRepository _trainingRepository;
   List<Routine> routines;
+  List<String> _trainingIds = [];
+  List<TrainingEntity> _trainings = [];
 
-  ProgramDBloc({TrainingRepository trainingRepository})
+  ProgramDBloc(
+      {List<String> trainingIds, TrainingRepository trainingRepository})
       : assert(trainingRepository != null),
         _trainingRepository = trainingRepository,
+        assert(trainingIds != null),
+        _trainingIds = trainingIds,
         super(ProgramDStateUninitialized());
 
   @override
   Stream<ProgramDState> mapEventToState(ProgramDEvent event) async* {
-    if (event is ProgramDEventSelect) {
-      yield* _mapToLoad(event.program);
+    if (event == ProgramDEvent.LOAD) {
+      yield* _mapToLoad();
     }
   }
 
-  Stream<ProgramDState> _mapToLoad(ProgramEntity program) async* {
+  Stream<ProgramDState> _mapToLoad() async* {
+    _trainings?.clear();
     yield ProgramDStateLoading();
+    try {
+      for (var i = 0; i < _trainingIds.length; i++) {
+        var training =
+            await _trainingRepository.getTrainingById(_trainingIds[i]);
+        _trainings.add(training);
+      }
+      yield ProgramDStateLoaded(_trainings);
+    } catch (e) {
+      print(e);
+    }
   }
 }
 
@@ -39,22 +55,13 @@ class ProgramDStateUninitialized extends ProgramDState {}
 class ProgramDStateLoading extends ProgramDState {}
 
 class ProgramDStateLoaded extends ProgramDState {
-  final int selectedIndex;
   final List<TrainingEntity> trainings;
 
-  const ProgramDStateLoaded(this.selectedIndex, this.trainings);
+  const ProgramDStateLoaded(this.trainings);
 
   @override
-  List<Object> get props => [selectedIndex, trainings];
+  List<Object> get props => [trainings];
 }
 
 //events
-abstract class ProgramDEvent {
-  const ProgramDEvent();
-}
-
-class ProgramDEventSelect extends ProgramDEvent {
-  final ProgramEntity program;
-
-  const ProgramDEventSelect(this.program);
-}
+enum ProgramDEvent { LOAD, UPDATE }

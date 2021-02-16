@@ -4,4 +4,8 @@ Map<String, String> descriptions = {
   'baja': 'Ejercita la parte baja',
   'tronco': 'Ejercita el tronco',
   'que hacer': 'Qué hacer',
+  'menos12min': 'Menos de 12 Min',
+  'intermedio': 'Intermedio',
+  'principiante': 'Principiante',
+  'avanzado': 'Avanzado',
 };

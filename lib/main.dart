@@ -23,6 +23,7 @@ import 'package:flutter_tv/repositories/program_repository.dart';
 import 'package:flutter_tv/repositories/training_repository.dart';
 import 'package:flutter_tv/views/category_view.dart';
 import 'package:flutter_tv/views/detail_view.dart';
+import 'package:flutter_tv/views/empty_view.dart';
 import 'package:flutter_tv/views/program_detail.dart';
 import 'package:flutter_tv/views/video_view.dart';
 import 'package:flutter_tv/views/home_view.dart';
@@ -100,6 +101,7 @@ class MyApp extends StatelessWidget {
             initialRoute: HomeScreen.id,
             routes: {
               HomeScreen.id: (context) => HomeScreen(),
+              EmptyView.id: (context) => EmptyView(),
               DetailScreen.id: (context) => DetailScreen(),
               ProgramDetailScreen.id: (context) => ProgramDetailScreen(),
               CategoryScreen.id: (context) => BlocProvider(

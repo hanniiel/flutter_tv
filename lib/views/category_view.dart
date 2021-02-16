@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tv/bloc/bloc_category_selector.dart';
+import 'package:flutter_tv/components/card_program_tv.dart';
 import 'package:flutter_tv/components/card_tv.dart';
 import 'package:flutter_tv/components/core/focus_base.dart';
 import 'package:flutter_tv/components/focus_widget.dart';
 import 'package:flutter_tv/components/home_section.dart';
 import 'package:flutter_tv/models/category_entity.dart';
 import 'package:flutter_tv/models/descriptions.dart';
+import 'package:flutter_tv/models/initializer.dart';
 import 'package:flutter_tv/models/training_entity.dart';
 import 'package:flutter_tv/utils/KeyEventHandler.dart';
 import 'package:flutter_tv/utils/UrlImage.dart';
@@ -44,6 +46,26 @@ class CategoryScreen extends StatelessWidget {
                     lista[i.body].add(i);
                   }
                 }
+                if (i.difficulty != null) {
+                  if (lista[i.difficulty] == null) {
+                    lista[i.difficulty] = [];
+                    lista[i.difficulty].add(i);
+                  } else {
+                    lista[i.difficulty].add(i);
+                  }
+                }
+                if (i.duration != null) {
+                  if (lista['menos12min'] == null) {
+                    lista['menos12min'] = [];
+                    if (i.duration <= 12) {
+                      lista['menos12min'].add(i);
+                    }
+                  } else {
+                    if (i.duration <= 12) {
+                      lista['menos12min'].add(i);
+                    }
+                  }
+                }
               }
 
               return ListView.builder(
@@ -63,13 +85,18 @@ class CategoryScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           var training = ts[index];
 
-                          return FocusBaseWidget(
+                          return CardProgramTv(
                             onFocus: (isFocused) {},
                             onPressed: () {
                               Navigator.pushNamed(context, DetailScreen.id,
                                   arguments: training);
                             },
                             title: training.name,
+                            category: cats
+                                .singleWhere((element) =>
+                                    element.id == training.category)
+                                .name
+                                .toUpperCase(),
                             cover: UrlImage.getUrl(training.cover),
                           );
                         },

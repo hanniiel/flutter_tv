@@ -27,7 +27,7 @@ class TrainingEntity extends Equatable {
   //
   bool isFocused;
 
-  static TrainingEntity fromSnap(QueryDocumentSnapshot snapshot) {
+  static TrainingEntity fromSnap(DocumentSnapshot snapshot) {
     return TrainingEntity(
       id: snapshot.id,
       name: snapshot.data()['name'],
