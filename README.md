@@ -14,13 +14,18 @@ Flutter App for Android TV
 <h1>Custom Player Controls</h1>
 <img src="screenshots/5.png" height="300"/>
 
+
 ## Plugins implemented
 <ul>
 	<li>video_player</li>
-	<li>flutter_blog</li>
+	<li>flutter_bloc</li>
 	<li>equatable</li>
 	<li>flutter svg</li>
 </ul>
+
+## Sponsor
+<img src="https://user-images.githubusercontent.com/13456748/116788486-75d64300-aa6f-11eb-8096-20b95c5b2718.png"/>
+
 
 This project is a starting point for a Flutter application.
 
