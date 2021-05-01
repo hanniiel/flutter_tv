@@ -25,6 +25,7 @@ Flutter App for Android TV
 
 ## Sponsor
 <img src="https://user-images.githubusercontent.com/13456748/116788486-75d64300-aa6f-11eb-8096-20b95c5b2718.png"/>
+https://www.paypal.com/donate?hosted_button_id=EDSTY87AC7YWE
 
 
 This project is a starting point for a Flutter application.
