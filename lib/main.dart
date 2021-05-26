@@ -3,21 +3,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_tv/bloc/bloc_categories.dart';
 import 'package:flutter_tv/bloc/bloc_category_selector.dart';
-import 'package:flutter_tv/bloc/bloc_newest.dart';
+import 'package:flutter_tv/bloc/bloc_movies.dart';
 import 'package:flutter_tv/bloc/bloc_overlay.dart';
-import 'package:flutter_tv/bloc/bloc_popular.dart';
 import 'package:flutter_tv/bloc/bloc_video.dart';
 import 'package:flutter_tv/bloc/bloc_video_controls.dart';
 import 'package:flutter_tv/bloc/simple_bloc_observer.dart';
+import 'package:flutter_tv/models/movie_entity.dart';
 import 'package:flutter_tv/models/training_entity.dart';
-import 'package:flutter_tv/repositories/category_reposityory.dart';
+import 'package:flutter_tv/repositories/movie_repository.dart';
 import 'package:flutter_tv/repositories/training_repository.dart';
 import 'package:flutter_tv/views/category_view.dart';
 import 'package:flutter_tv/views/detail_view.dart';
 import 'package:flutter_tv/views/video_view.dart';
 import 'package:flutter_tv/views/home_view.dart';
+
+import 'bloc/bloc_preview.dart';
 //env
 //cat .env | xargs
 
@@ -35,26 +36,19 @@ class MyApp extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(create: (context) => TrainingFireStoreRepository()),
-        RepositoryProvider(create: (context) => CategoryFireStoreRepository()),
+        RepositoryProvider(create: (context) => MovieFireRepository()),
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider<NewestBloc>(
-            //lazy: false,
-            create: (context) =>
-                NewestBloc(context.repository<TrainingFireStoreRepository>())
-                  ..add(NewestEventLoad()),
-          ),
-          BlocProvider<PopularBloc>(
-            //lazy: false,
-            create: (context) =>
-                PopularBloc(context.repository<TrainingFireStoreRepository>())
-                  ..add(PopularEventLoad()),
-          ),
           BlocProvider(
-              create: (context) => CategoriesBloc(
-                  context.repository<CategoryFireStoreRepository>())
-                ..add(CategoryEventLoad()))
+            create: (context) => PreviewBloc(),
+          ),
+          BlocProvider<MoviesBloc>(
+            //lazy: false,
+            create: (context) =>
+                MoviesBloc(context.repository<MovieFireRepository>())
+                  ..add(MoviesEvent.LOAD),
+          ),
         ],
         child: Shortcuts(
           shortcuts: <LogicalKeySet, Intent>{
@@ -79,7 +73,7 @@ class MyApp extends StatelessWidget {
             },
             onGenerateRoute: (settings) {
               if (settings.name == VideoScreen.id) {
-                final TrainingEntity args = settings.arguments;
+                final MovieEntity args = settings.arguments;
 
                 return MaterialPageRoute(
                   builder: (context) {

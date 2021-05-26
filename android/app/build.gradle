@@ -37,7 +37,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.fitflow.fitflow"
+        applicationId "com.kdbak.flutter_tv"
         minSdkVersion 16
         targetSdkVersion 29
         multiDexEnabled true

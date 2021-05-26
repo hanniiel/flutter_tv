@@ -5,7 +5,7 @@ import 'package:flutter_tv/components/card_tv.dart';
 import 'package:flutter_tv/components/core/focus_base.dart';
 import 'package:flutter_tv/components/focus_widget.dart';
 import 'package:flutter_tv/components/home_section.dart';
-import 'package:flutter_tv/models/category_entity.dart';
+
 import 'package:flutter_tv/models/descriptions.dart';
 import 'package:flutter_tv/models/training_entity.dart';
 import 'package:flutter_tv/utils/KeyEventHandler.dart';
@@ -17,7 +17,7 @@ class CategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CategoryEntity category = ModalRoute.of(context).settings.arguments;
+    final dynamic category = ModalRoute.of(context).settings.arguments;
     BlocProvider.of<CategorySelectorBloc>(context)
         .add(CatSelectorEventSelect(category));
     return Scaffold(

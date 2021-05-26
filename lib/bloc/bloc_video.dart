@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_tv/repositories/vimeo_repository.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:math' as math;
 
@@ -26,9 +25,8 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
 
   Stream<VideoState> _mapToLoad() async* {
     yield VideoStateLoading();
-    var data = await VimeoRepository.getVideo(videoId);
     _playerController = VideoPlayerController.network(
-        data.files?.firstWhere((element) => element.width == 720)?.link ?? '')
+        'https://content.jwplatform.com/videos/$videoId-MVFEw1jT.mp4')
       ..initialize().then((_) {
         add(VideoEvent.READY);
       });
@@ -59,7 +57,7 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
     if (_playerController.value.isPlaying) {
       _playerController.pause();
     } else {
-      if (!_playerController.value.initialized) {
+      if (!_playerController.value.isInitialized) {
         _playerController.initialize().then((_) {
           _playerController.play();
         });

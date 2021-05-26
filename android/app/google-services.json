@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "633877138507",
+    "project_id": "flutter-tv-c1d4d",
+    "storage_bucket": "flutter-tv-c1d4d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:633877138507:android:7c64cf3ab4cb87e7b211ce",
+        "android_client_info": {
+          "package_name": "com.kdbak.flutter_tv"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "633877138507-8rfaiugg0q3cu06nlcfdtteofl8qjsvr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCg4CcL9oO-MjXMK-LfJk5IrRFMrmBxtL0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "633877138507-8rfaiugg0q3cu06nlcfdtteofl8qjsvr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

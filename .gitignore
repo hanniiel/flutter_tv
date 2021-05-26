@@ -46,6 +46,5 @@ app.*.map.json
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 .env
-android/app/google-services.json
 lib/environment.dart
 web/firebase_config.js

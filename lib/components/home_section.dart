@@ -21,7 +21,7 @@ class HomeSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(left: 23, bottom: 17),
+            padding: EdgeInsets.only(bottom: 17),
             child: Text(
               title,
               style: isHeader

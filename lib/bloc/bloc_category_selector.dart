@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_tv/models/category_entity.dart';
 import 'package:flutter_tv/models/training_entity.dart';
 import 'package:flutter_tv/repositories/training_repository.dart';
 
@@ -26,7 +25,7 @@ class CategorySelectorBloc extends Bloc<CatSelectorEvent, CatSelectorState> {
     }
   }
 
-  Stream<CatSelectorState> _mapToSelect(CategoryEntity category) async* {
+  Stream<CatSelectorState> _mapToSelect(dynamic category) async* {
     yield CatSelectorStateLoading();
     _subscription?.cancel();
     _subscription = _repository
@@ -85,7 +84,7 @@ abstract class CatSelectorEvent extends Equatable {
 }
 
 class CatSelectorEventSelect extends CatSelectorEvent {
-  final CategoryEntity category;
+  final dynamic category;
   const CatSelectorEventSelect(this.category);
 
   @override

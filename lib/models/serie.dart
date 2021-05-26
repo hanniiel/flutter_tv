@@ -1,3 +1,0 @@
-class Serie {
-  String name;
-}

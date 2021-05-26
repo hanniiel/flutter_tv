@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_tv/bloc/bloc_categories.dart';
-import 'package:flutter_tv/bloc/bloc_newest.dart';
-import 'package:flutter_tv/bloc/bloc_popular.dart';
-import 'package:flutter_tv/components/card_category_tv.dart';
-import 'package:flutter_tv/components/card_tv.dart';
+import 'package:flutter_tv/bloc/bloc_movies.dart';
+import 'package:flutter_tv/bloc/bloc_preview.dart';
+import 'package:flutter_tv/components/core/card_movie.dart';
 import 'package:flutter_tv/components/core/focus_base.dart';
-import 'package:flutter_tv/components/focus_widget.dart';
 import 'package:flutter_tv/components/home_section.dart';
-import 'package:flutter_tv/utils/KeyEventHandler.dart';
+import 'package:flutter_tv/constants/constants.dart';
 import 'package:flutter_tv/utils/UrlImage.dart';
-import 'package:flutter_tv/views/category_view.dart';
 import 'package:flutter_tv/views/detail_view.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -18,109 +14,148 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height / 2;
+    var width = MediaQuery.of(context).size.width / 2;
+
     return Scaffold(
       backgroundColor: Colors.black,
-      body: ListView(
-          padding: EdgeInsets.only(top: 100, left: 20),
-          children: <Widget>[
-            HomeSection(
-              title: 'LO MÀS NUEVO',
-              section: BlocBuilder<NewestBloc, NewestState>(
-                // ignore: missing_return
+      endDrawerEnableOpenDragGesture: false,
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Container(
+              height: height,
+              child: BlocBuilder<PreviewBloc, PreviewState>(
                 builder: (_, state) {
-                  // ignore: missing_return
-
-                  if (state is NewestStateLoaded) {
-                    var trainings = state.trainings;
-                    return Container(
-                      height: 250,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: trainings.length,
-                        itemBuilder: (context, index) {
-                          var training = trainings[index];
-                          return FocusBaseWidget(
-                            onFocus: (isFocused) {},
-                            onPressed: () {
-                              Navigator.pushNamed(context, DetailScreen.id,
-                                  arguments: training);
-                            },
-                            title: training.name,
-                            cover: UrlImage.getUrl(training.cover),
-                          );
-                        },
-                      ),
+                  if (state is PreviewStateLoaded) {
+                    var movie = state.movieEntity;
+                    return Stack(
+                      children: [
+                        Positioned.fill(
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Image.network(
+                              movie.cover,
+                              width: width,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                        Positioned.fill(
+                            child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            padding: EdgeInsets.only(top: 30),
+                            width: width,
+                            height: height,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Image.network(
+                                  movie.titleCover,
+                                  width: width / 2,
+                                ),
+                                SizedBox(height: 10),
+                                Text(movie.description,
+                                    style: kTitleDescriptions.copyWith(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w300,
+                                    ))
+                              ],
+                            ),
+                          ),
+                        ))
+                      ],
                     );
                   }
-                  return Center(child: CircularProgressIndicator());
+                  return Container();
                 },
               ),
             ),
-            HomeSection(
-              title: 'CATEGORÍAS',
-              section: BlocBuilder<CategoriesBloc, CategoryState>(
-                // ignore: missing_return
-                builder: (_, state) {
-                  if (state is CategoryStateLoaded) {
-                    var categories = state.categories;
-                    return Container(
-                      height: 150,
-                      child: ListView.builder(
+          ),
+          Expanded(
+            child:
+                ListView(padding: EdgeInsets.only(left: 20), children: <Widget>[
+              HomeSection(
+                title: 'My List',
+                section: BlocBuilder<MoviesBloc, MoviesState>(
+                  // ignore: missing_return
+                  builder: (_, state) {
+                    // ignore: missing_return
+
+                    if (state is MoviesStateLoaded) {
+                      var trainings = state.movies;
+                      return Container(
+                        height: 250,
+                        child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: categories.length,
+                          itemCount: trainings.length,
                           itemBuilder: (context, index) {
-                            var category = categories[index];
-                            return CardCategoryTv(
-                              cover: UrlImage.getUrl(category.cover),
-                              icon: category.icon,
-                              title: category.name,
-                              onPressed: () {
-                                Navigator.pushNamed(context, CategoryScreen.id,
-                                    arguments: category);
+                            var training = trainings[index];
+                            return CardMovie(
+                              isProgram: true,
+                              onFocus: (isFocused) {
+                                BlocProvider.of<PreviewBloc>(context)
+                                    .add(PreviewEventLoad(training));
                               },
-                              onFocus: (hasFocus) {},
+                              onPressed: () {
+                                Navigator.pushNamed(context, DetailScreen.id,
+                                    arguments: training);
+                              },
+                              title: training.title,
+                              cover: training.cover,
                             );
-                          }),
-                    );
-                  }
-                  return Center(child: CircularProgressIndicator());
-                },
+                          },
+                        ),
+                      );
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  },
+                ),
               ),
-            ),
-            HomeSection(
-              title: 'POPULARES',
-              section: BlocBuilder<PopularBloc, PopularState>(
-                // ignore: missing_return
-                builder: (_, state) {
+              HomeSection(
+                title: 'My List',
+                section: BlocBuilder<MoviesBloc, MoviesState>(
                   // ignore: missing_return
+                  builder: (_, state) {
+                    // ignore: missing_return
 
-                  if (state is PopularStateLoaded) {
-                    var trainings = state.trainings;
-                    return Container(
-                      height: 250,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: trainings.length,
-                        itemBuilder: (context, index) {
-                          var training = trainings[index];
-                          return FocusBaseWidget(
-                            onFocus: (isFocused) {},
-                            onPressed: () {
-                              Navigator.pushNamed(context, DetailScreen.id,
-                                  arguments: training);
-                            },
-                            title: training.name,
-                            cover: UrlImage.getUrl(training.cover),
-                          );
-                        },
-                      ),
-                    );
-                  }
-                  return Center(child: CircularProgressIndicator());
-                },
+                    if (state is MoviesStateLoaded) {
+                      var trainings = state.movies;
+                      return Container(
+                        height: 250,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: trainings.length,
+                          itemBuilder: (context, index) {
+                            var training = trainings[index];
+                            return CardMovie(
+                              onFocus: (isFocused) {
+                                BlocProvider.of<PreviewBloc>(context)
+                                    .add(PreviewEventLoad(training));
+                              },
+                              onPressed: () {
+                                Navigator.pushNamed(context, DetailScreen.id,
+                                    arguments: training);
+                              },
+                              title: training.title,
+                              cover: training.cover,
+                            );
+                          },
+                        ),
+                      );
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  },
+                ),
               ),
-            ),
-          ]),
+            ]),
+          )
+        ],
+      ),
     );
   }
 }
